@@ -8,7 +8,7 @@
 
 #include <iostream>
 #include "korg_syro_volcasample.h"
-#include "RtAudio.h"
+#include "maximilian.h"
 
 #define WAV_POS_RIFF_SIZE 0x04
 #define WAV_POS_DATA_SIZE 0x28
@@ -84,6 +84,16 @@ static bool writeFile(const char *filename, uint8_t *buf, uint32_t size)
     return true;
 }
 
+void setup() {//some inits
+    //nothing to go here this time
+}
+
+void play(double *output) {
+
+    output[0]=0.0;
+    output[1]=output[0];
+}
+
 int main(int argc, const char * argv[]) {
     
 // 1.prepare the data to be converted
@@ -147,12 +157,6 @@ int main(int argc, const char * argv[]) {
         printf("Conversion complete\n");
     
     free(buf_dest);
-    
-    RtAudio dac(RtAudio::MACOSX_CORE);
-    if(dac.getDeviceCount() < 1) {
-        std::cout << "\nNo aduio devices found!\n";
-        exit(0);
-    }
     
     return 0;
 }
