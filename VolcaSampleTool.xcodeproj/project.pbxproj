@@ -11,6 +11,7 @@
 		34AE84792150D9200064B903 /* korg_syro_volcasample.c in Sources */ = {isa = PBXBuildFile; fileRef = 34AE84732150D9200064B903 /* korg_syro_volcasample.c */; };
 		34AE847A2150D9200064B903 /* korg_syro_comp.c in Sources */ = {isa = PBXBuildFile; fileRef = 34AE84752150D9200064B903 /* korg_syro_comp.c */; };
 		34AE847B2150D9200064B903 /* korg_syro_func.c in Sources */ = {isa = PBXBuildFile; fileRef = 34AE84772150D9200064B903 /* korg_syro_func.c */; };
+		34D93B6C21564A8500EA4A06 /* RtAudio.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 34D93B6A21564A8500EA4A06 /* RtAudio.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -35,6 +36,8 @@
 		34AE84762150D9200064B903 /* korg_syro_comp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = korg_syro_comp.h; sourceTree = "<group>"; };
 		34AE84772150D9200064B903 /* korg_syro_func.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = korg_syro_func.c; sourceTree = "<group>"; };
 		34AE84782150D9200064B903 /* korg_syro_func.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = korg_syro_func.h; sourceTree = "<group>"; };
+		34D93B6A21564A8500EA4A06 /* RtAudio.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = RtAudio.cpp; path = "../../../../Documents/Music/software/rtaudio-5.0.0/RtAudio.cpp"; sourceTree = "<group>"; };
+		34D93B6B21564A8500EA4A06 /* RtAudio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RtAudio.h; path = "../../../../Documents/Music/software/rtaudio-5.0.0/RtAudio.h"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -67,6 +70,8 @@
 		345865A72150D77300496A95 /* VolcaSampleTool */ = {
 			isa = PBXGroup;
 			children = (
+				34D93B6A21564A8500EA4A06 /* RtAudio.cpp */,
+				34D93B6B21564A8500EA4A06 /* RtAudio.h */,
 				34AE84752150D9200064B903 /* korg_syro_comp.c */,
 				34AE84762150D9200064B903 /* korg_syro_comp.h */,
 				34AE84772150D9200064B903 /* korg_syro_func.c */,
@@ -139,6 +144,7 @@
 				34AE847A2150D9200064B903 /* korg_syro_comp.c in Sources */,
 				34AE84792150D9200064B903 /* korg_syro_volcasample.c in Sources */,
 				34AE847B2150D9200064B903 /* korg_syro_func.c in Sources */,
+				34D93B6C21564A8500EA4A06 /* RtAudio.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
