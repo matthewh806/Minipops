@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		34365367215663EA0073936C /* StreamSample.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 34365365215663EA0073936C /* StreamSample.cpp */; };
 		345865A92150D77300496A95 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 345865A82150D77300496A95 /* main.cpp */; };
 		34AE84792150D9200064B903 /* korg_syro_volcasample.c in Sources */ = {isa = PBXBuildFile; fileRef = 34AE84732150D9200064B903 /* korg_syro_volcasample.c */; };
 		34AE847A2150D9200064B903 /* korg_syro_comp.c in Sources */ = {isa = PBXBuildFile; fileRef = 34AE84752150D9200064B903 /* korg_syro_comp.c */; };
@@ -18,20 +17,19 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		345865A32150D77300496A95 /* CopyFiles */ = {
+		345865A32150D77300496A95 /* Copy Files */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = /usr/share/man/man1/;
 			dstSubfolderSpec = 0;
 			files = (
 			);
+			name = "Copy Files";
 			runOnlyForDeploymentPostprocessing = 1;
 		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		34365365215663EA0073936C /* StreamSample.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = StreamSample.cpp; sourceTree = "<group>"; };
-		34365366215663EA0073936C /* StreamSample.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = StreamSample.hpp; sourceTree = "<group>"; };
 		345865A52150D77300496A95 /* VolcaSampleTool */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = VolcaSampleTool; sourceTree = BUILT_PRODUCTS_DIR; };
 		345865A82150D77300496A95 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		34AE84722150D9200064B903 /* korg_syro_type.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = korg_syro_type.h; sourceTree = "<group>"; };
@@ -46,36 +44,6 @@
 		34D93DDD21565D7100EA4A06 /* AudioUnit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioUnit.framework; path = System/Library/Frameworks/AudioUnit.framework; sourceTree = SDKROOT; };
 		34D93DDF21565D7F00EA4A06 /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreServices.framework; path = System/Library/Frameworks/CoreServices.framework; sourceTree = SDKROOT; };
 		34D93DE121565DB600EA4A06 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
-		34D93E882156620000EA4A06 /* RtError.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RtError.h; sourceTree = "<group>"; };
-		34D93E892156620000EA4A06 /* RtAudio.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = RtAudio.cpp; sourceTree = "<group>"; };
-		34D93E8A2156620000EA4A06 /* player.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = player.cpp; sourceTree = "<group>"; };
-		34D93E8B2156620000EA4A06 /* player.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = player.h; sourceTree = "<group>"; };
-		34D93E8C2156620000EA4A06 /* portaudio.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = portaudio.h; sourceTree = "<group>"; };
-		34D93E8D2156620000EA4A06 /* bigFiles.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = bigFiles.txt; sourceTree = "<group>"; };
-		34D93E8E2156620000EA4A06 /* stb_vorbis.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = stb_vorbis.c; sourceTree = "<group>"; };
-		34D93E8F2156620000EA4A06 /* RtAudio.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RtAudio.h; sourceTree = "<group>"; };
-		34D93E902156620000EA4A06 /* README */ = {isa = PBXFileReference; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
-		34D93E922156620000EA4A06 /* maxiGrains.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = maxiGrains.h; sourceTree = "<group>"; };
-		34D93E932156620000EA4A06 /* maxiMFCC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = maxiMFCC.h; sourceTree = "<group>"; };
-		34D93E942156620000EA4A06 /* fft.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = fft.h; sourceTree = "<group>"; };
-		34D93E952156620000EA4A06 /* maxiFFT.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = maxiFFT.h; sourceTree = "<group>"; };
-		34D93E962156620000EA4A06 /* maxiMFCC.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = maxiMFCC.cpp; sourceTree = "<group>"; };
-		34D93E972156620000EA4A06 /* maxiAtoms.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = maxiAtoms.h; sourceTree = "<group>"; };
-		34D93E992156620000EA4A06 /* fft.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = fft.cpp; sourceTree = "<group>"; };
-		34D93E9B2156620000EA4A06 /* maxiBark.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = maxiBark.cpp; sourceTree = "<group>"; };
-		34D93E9C2156620000EA4A06 /* maxiAtoms.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = maxiAtoms.cpp; sourceTree = "<group>"; };
-		34D93E9D2156620000EA4A06 /* maxiFFT.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = maxiFFT.cpp; sourceTree = "<group>"; };
-		34D93E9E2156620000EA4A06 /* maxiGrains.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = maxiGrains.cpp; sourceTree = "<group>"; };
-		34D93E9F2156620000EA4A06 /* maxiBark.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = maxiBark.h; sourceTree = "<group>"; };
-		34D93EA02156620000EA4A06 /* sineTable.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = sineTable.h; sourceTree = "<group>"; };
-		34D93EA12156620000EA4A06 /* maxim.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = maxim.h; sourceTree = "<group>"; };
-		34D93EB12156620000EA4A06 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
-		34D9401B2156620100EA4A06 /* blip.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = blip.wav; sourceTree = "<group>"; };
-		34D9401C2156620100EA4A06 /* snare.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = snare.wav; sourceTree = "<group>"; };
-		34D9401D2156620100EA4A06 /* maximilian.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = maximilian.h; sourceTree = "<group>"; };
-		34D9401E2156620100EA4A06 /* beat2.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = beat2.wav; sourceTree = "<group>"; };
-		34D940202156620100EA4A06 /* stb_vorbis.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = stb_vorbis.h; sourceTree = "<group>"; };
-		34D940212156620100EA4A06 /* maximilian.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = maximilian.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -120,9 +88,6 @@
 				34AE84732150D9200064B903 /* korg_syro_volcasample.c */,
 				34AE84742150D9200064B903 /* korg_syro_volcasample.h */,
 				345865A82150D77300496A95 /* main.cpp */,
-				34D93E842156620000EA4A06 /* Maximilian */,
-				34365365215663EA0073936C /* StreamSample.cpp */,
-				34365366215663EA0073936C /* StreamSample.hpp */,
 			);
 			path = VolcaSampleTool;
 			sourceTree = "<group>";
@@ -139,51 +104,6 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		34D93E842156620000EA4A06 /* Maximilian */ = {
-			isa = PBXGroup;
-			children = (
-				34D93E882156620000EA4A06 /* RtError.h */,
-				34D93E892156620000EA4A06 /* RtAudio.cpp */,
-				34D93E8A2156620000EA4A06 /* player.cpp */,
-				34D93E8B2156620000EA4A06 /* player.h */,
-				34D93E8C2156620000EA4A06 /* portaudio.h */,
-				34D93E8D2156620000EA4A06 /* bigFiles.txt */,
-				34D93E8E2156620000EA4A06 /* stb_vorbis.c */,
-				34D93E8F2156620000EA4A06 /* RtAudio.h */,
-				34D93E902156620000EA4A06 /* README */,
-				34D93E912156620000EA4A06 /* libs */,
-				34D93EB12156620000EA4A06 /* .gitignore */,
-				34D9401B2156620100EA4A06 /* blip.wav */,
-				34D9401C2156620100EA4A06 /* snare.wav */,
-				34D9401D2156620100EA4A06 /* maximilian.h */,
-				34D9401E2156620100EA4A06 /* beat2.wav */,
-				34D940202156620100EA4A06 /* stb_vorbis.h */,
-				34D940212156620100EA4A06 /* maximilian.cpp */,
-			);
-			path = Maximilian;
-			sourceTree = "<group>";
-		};
-		34D93E912156620000EA4A06 /* libs */ = {
-			isa = PBXGroup;
-			children = (
-				34D93E992156620000EA4A06 /* fft.cpp */,
-				34D93E942156620000EA4A06 /* fft.h */,
-				34D93E9C2156620000EA4A06 /* maxiAtoms.cpp */,
-				34D93E972156620000EA4A06 /* maxiAtoms.h */,
-				34D93E9B2156620000EA4A06 /* maxiBark.cpp */,
-				34D93E9F2156620000EA4A06 /* maxiBark.h */,
-				34D93E9D2156620000EA4A06 /* maxiFFT.cpp */,
-				34D93E952156620000EA4A06 /* maxiFFT.h */,
-				34D93E9E2156620000EA4A06 /* maxiGrains.cpp */,
-				34D93E922156620000EA4A06 /* maxiGrains.h */,
-				34D93EA12156620000EA4A06 /* maxim.h */,
-				34D93E962156620000EA4A06 /* maxiMFCC.cpp */,
-				34D93E932156620000EA4A06 /* maxiMFCC.h */,
-				34D93EA02156620000EA4A06 /* sineTable.h */,
-			);
-			path = libs;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -193,7 +113,7 @@
 			buildPhases = (
 				345865A12150D77300496A95 /* Sources */,
 				345865A22150D77300496A95 /* Frameworks */,
-				345865A32150D77300496A95 /* CopyFiles */,
+				345865A32150D77300496A95 /* Copy Files */,
 			);
 			buildRules = (
 			);
@@ -243,7 +163,6 @@
 				345865A92150D77300496A95 /* main.cpp in Sources */,
 				34AE847A2150D9200064B903 /* korg_syro_comp.c in Sources */,
 				34AE84792150D9200064B903 /* korg_syro_volcasample.c in Sources */,
-				34365367215663EA0073936C /* StreamSample.cpp in Sources */,
 				34AE847B2150D9200064B903 /* korg_syro_func.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -365,8 +284,13 @@
 		345865AD2150D77300496A95 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
 				CODE_SIGN_STYLE = Automatic;
+				FRAMEWORK_SEARCH_PATHS = /Library/Frameworks;
 				GCC_PREPROCESSOR_DEFINITIONS_NOT_USED_IN_PRECOMPS = __MACOSX_CORE__;
+				HEADER_SEARCH_PATHS = /usr/local/include;
+				LIBRARY_SEARCH_PATHS = /usr/local/lib;
+				OTHER_LDFLAGS = "-lSDL2";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -374,8 +298,13 @@
 		345865AE2150D77300496A95 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
 				CODE_SIGN_STYLE = Automatic;
+				FRAMEWORK_SEARCH_PATHS = /Library/Frameworks;
 				GCC_PREPROCESSOR_DEFINITIONS_NOT_USED_IN_PRECOMPS = __MACOSX_CORE__;
+				HEADER_SEARCH_PATHS = /usr/local/include;
+				LIBRARY_SEARCH_PATHS = /usr/local/lib;
+				OTHER_LDFLAGS = "-lSDL2";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;

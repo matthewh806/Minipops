@@ -8,8 +8,7 @@
 
 #include <iostream>
 #include "korg_syro_volcasample.h"
-#include "maximilian.h"
-#include "StreamSample.hpp"
+#include <SDL2/SDL.h>
 
 #define WAV_POS_RIFF_SIZE 0x04
 #define WAV_POS_DATA_SIZE 0x28
@@ -29,12 +28,6 @@ static const uint8_t wav_header[] = {
     'd',  'a',  't',  'a',        // 'data'
     0x00, 0x00, 0x00, 0x00        // data size(bytes)
 };
-
-int maxiSettings::sampleRate = 44100;
-int maxiSettings::channels = 2;
-int maxiSettings::bufferSize = 1024;
-
-StreamSample sampleStream;
 
 static void set32BitValue(uint8_t *ptr, uint32_t dat)
 {
@@ -91,14 +84,20 @@ static bool writeFile(const char *filename, uint8_t *buf, uint32_t size)
     return true;
 }
 
-void setup() {//some inits
-    //nothing to go here this time
-}
+static uint8_t *audioPos;
+static uint32_t audioLen;
 
-void play(double *output) {
 
-    output[0]=0.0;
-    output[1]=output[0];
+void AudioCallback(void *userData, Uint8 *stream, int len)
+{
+    if(audioLen == 0)
+        return;
+    
+    len = (len > audioLen) ? audioLen : len;
+    SDL_MixAudio(stream, audioPos, len, SDL_MIX_MAXVOLUME);
+    
+    audioPos += len;
+    audioLen -= len;
 }
 
 int main(int argc, const char * argv[]) {
@@ -164,6 +163,39 @@ int main(int argc, const char * argv[]) {
         printf("Conversion complete\n");
     
     free(buf_dest);
+    
+    if(SDL_Init(SDL_INIT_AUDIO) < 0) {
+        std::cerr << "Error: Could not initialize SDL" << std::endl;
+        return 1;
+    }
+    
+    SDL_AudioSpec wavSpec;
+    uint8_t* wavStart;
+    uint32_t wavLength;
+    
+    if(SDL_LoadWAV(argv[1], &wavSpec, &wavStart, &wavLength) == NULL) {
+        std::cerr << "Error: File could not be loaded as an audio file" << std::endl;
+        return 1;
+    }
+    
+    wavSpec.callback = AudioCallback;
+    wavSpec.userdata = NULL;
+    audioPos = wavStart;
+    audioLen = wavLength;
+    
+    if(SDL_OpenAudio(&wavSpec, NULL) < 0) {
+        std::cerr << "Error: " << SDL_GetError() << std::endl;
+        return 1;
+    }
+    
+    SDL_PauseAudio(0);
+    
+    while(audioLen > 0) {
+        SDL_Delay(100);
+    }
+    
+    SDL_CloseAudio();
+    SDL_FreeWAV(wavStart);
     
     return 0;
 }
