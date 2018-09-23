@@ -84,28 +84,12 @@ static bool writeFile(const char *filename, uint8_t *buf, uint32_t size)
     return true;
 }
 
-static uint8_t *audioPos;
-static uint32_t audioLen;
-
-
-void AudioCallback(void *userData, uint8_t *stream, int len)
+static int constructSyroStream(const char *filename)
 {
-    if(audioLen == 0)
-        return;
-    
-    len = (len > audioLen) ? audioLen : len;
-    SDL_memcpy(stream, audioPos, len);
-    
-    audioPos += len;
-    audioLen -= len;
-}
-
-int main(int argc, const char * argv[]) {
-    
-// 1.prepare the data to be converted
-// 2.call the conversion start function
-// 3.process syrodata for each frame
-// 4.call the conversion end function
+    // 1.prepare the data to be converted
+    // 2.call the conversion start function
+    // 3.process syrodata for each frame
+    // 4.call the conversion end function
     
     SyroData syroData[10];
     SyroStatus status;
@@ -115,11 +99,6 @@ int main(int argc, const char * argv[]) {
     uint8_t *buf_dest;
     uint32_t size_dest, write_pos;
     int16_t left, right;
-    
-    if(argc != 2) {
-        printf(" Syntax: >%s output.wav \n", argv[0]);
-        return 1;
-    }
     
     constructDeleteData(syroData);
     
@@ -138,10 +117,10 @@ int main(int argc, const char * argv[]) {
         printf(" Not enough memory for wtite file.\n");
         SyroVolcaSample_End(handle);
         freeSyroData(syroData, numOfData);
-
+        
         return 1;
     }
-
+    
     memcpy(buf_dest, wav_header, sizeof(wav_header));
     set32BitValue((buf_dest + WAV_POS_RIFF_SIZE), (frame * 4 + 0x24));
     set32BitValue((buf_dest + WAV_POS_DATA_SIZE), (frame * 4));
@@ -159,11 +138,31 @@ int main(int argc, const char * argv[]) {
     SyroVolcaSample_End(handle);
     freeSyroData(syroData, numOfData);
     
-    if(writeFile(argv[1], buf_dest, size_dest))
+    if(writeFile(filename, buf_dest, size_dest))
         printf("Conversion complete\n");
     
     free(buf_dest);
     
+    return 0;
+}
+
+static uint8_t *audioPos;
+static uint32_t audioLen;
+
+void audioCallback(void *userData, uint8_t *stream, int len)
+{
+    if(audioLen == 0)
+        return;
+    
+    len = (len > audioLen) ? audioLen : len;
+    SDL_memcpy(stream, audioPos, len);
+    
+    audioPos += len;
+    audioLen -= len;
+}
+
+int playbackAudio(const char *filename)
+{
     if(SDL_Init(SDL_INIT_AUDIO) < 0) {
         std::cerr << "Error: Could not initialize SDL" << std::endl;
         return 1;
@@ -173,12 +172,12 @@ int main(int argc, const char * argv[]) {
     uint8_t* wavStart;
     uint32_t wavLength;
     
-    if(SDL_LoadWAV(argv[1], &wavSpec, &wavStart, &wavLength) == NULL) {
+    if(SDL_LoadWAV(filename, &wavSpec, &wavStart, &wavLength) == NULL) {
         std::cerr << "Error: File could not be loaded as an audio file" << std::endl;
         return 1;
     }
     
-    wavSpec.callback = AudioCallback;
+    wavSpec.callback = audioCallback;
     wavSpec.userdata = NULL;
     audioPos = wavStart;
     audioLen = wavLength;
@@ -198,4 +197,18 @@ int main(int argc, const char * argv[]) {
     SDL_FreeWAV(wavStart);
     
     return 0;
+}
+
+int main(int argc, const char * argv[]) {
+    if(argc != 2) {
+        printf(" Syntax: >%s output.wav \n", argv[0]);
+        return 1;
+    }
+    
+    if(constructSyroStream(argv[1]) == 1) {
+        printf("Error constructing SyroStream! \n");
+        return 1;
+    }
+    
+    return playbackAudio(argv[1]);
 }
