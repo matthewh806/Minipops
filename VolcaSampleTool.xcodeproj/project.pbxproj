@@ -38,6 +38,7 @@
 		34365392215829D50073936C /* korg_syro_comp.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = korg_syro_comp.c; path = src/korg_syro_comp.c; sourceTree = "<group>"; };
 		34365393215829D60073936C /* korg_syro_volcasample.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = korg_syro_volcasample.h; path = src/korg_syro_volcasample.h; sourceTree = "<group>"; };
 		34365394215829D60073936C /* korg_syro_func.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = korg_syro_func.h; path = src/korg_syro_func.h; sourceTree = "<group>"; };
+		3436539A215844020073936C /* helper_functions.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = helper_functions.hpp; path = src/helper_functions.hpp; sourceTree = "<group>"; };
 		345865A52150D77300496A95 /* VolcaSampleTool */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = VolcaSampleTool; sourceTree = BUILT_PRODUCTS_DIR; };
 		34D93B6E21564BA700EA4A06 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		34D93B7021564BAC00EA4A06 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
@@ -88,6 +89,7 @@
 				3436538D215829D50073936C /* korg_syro_volcasample.c */,
 				34365393215829D60073936C /* korg_syro_volcasample.h */,
 				34365390215829D50073936C /* main.cpp */,
+				3436539A215844020073936C /* helper_functions.hpp */,
 			);
 			path = VolcaSampleTool;
 			sourceTree = "<group>";

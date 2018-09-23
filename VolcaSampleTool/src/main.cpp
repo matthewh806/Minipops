@@ -8,36 +8,11 @@
 
 #include <iostream>
 #include "korg_syro_volcasample.h"
+#include "helper_functions.hpp"
 #include <SDL2/SDL.h>
 
 #define WAV_POS_RIFF_SIZE 0x04
 #define WAV_POS_DATA_SIZE 0x28
-
-static const uint8_t wav_header[] = {
-    'R' , 'I' , 'F',  'F',        // 'RIFF'
-    0x00, 0x00, 0x00, 0x00,        // Size (data size + 0x24)
-    'W',  'A',  'V',  'E',        // 'WAVE'
-    'f',  'm',  't',  ' ',        // 'fmt '
-    0x10, 0x00, 0x00, 0x00,        // Fmt chunk size
-    0x01, 0x00,                    // encode(wav)
-    0x02, 0x00,                    // channel = 2
-    0x44, 0xAC, 0x00, 0x00,        // Fs (44.1kHz)
-    0x10, 0xB1, 0x02, 0x00,        // Bytes per sec (Fs * 4)
-    0x04, 0x00,                    // Block Align (2ch,16Bit -> 4)
-    0x10, 0x00,                    // 16Bit
-    'd',  'a',  't',  'a',        // 'data'
-    0x00, 0x00, 0x00, 0x00        // data size(bytes)
-};
-
-static void set32BitValue(uint8_t *ptr, uint32_t dat)
-{
-    // TODO: Don't you dare delete this comment until you understand this code!!
-    for(int i = 0; i < 4; i++)
-    {
-        *ptr++ = (uint8_t)dat;
-        dat >>= 8;
-    }
-}
 
 static void freeSyroData(SyroData *syro_data, int num_of_data)
 {
@@ -62,26 +37,6 @@ static void constructDeleteData(SyroData *syro_data)
     syro_data->Size = 0;
     
     syro_data++;
-}
-
-static bool writeFile(const char *filename, uint8_t *buf, uint32_t size)
-{
-    FILE *fp;
-    
-    fp = fopen(filename, "wb");
-    if(!fp) {
-        printf(" File open error, %s \n", filename);
-        return false;
-    }
-    
-    if(fwrite(buf, 1, size, fp) < size) {
-        printf(" File write error, %s \n", filename);
-        fclose(fp);
-        return false;
-    }
-    
-    fclose(fp);
-    return true;
 }
 
 static int constructSyroStream(const char *filename)
@@ -110,7 +65,7 @@ static int constructSyroStream(const char *filename)
         return 1;
     }
     
-    size_dest = (frame * 4) + sizeof(wav_header); // TOOD: why x 4?
+    size_dest = (frame * 4) + sizeof(volca_constants::wav_header); // TOOD: why x 4?
     
     buf_dest = (uint8_t*) malloc(size_dest);
     if(!buf_dest) {
@@ -121,11 +76,11 @@ static int constructSyroStream(const char *filename)
         return 1;
     }
     
-    memcpy(buf_dest, wav_header, sizeof(wav_header));
-    set32BitValue((buf_dest + WAV_POS_RIFF_SIZE), (frame * 4 + 0x24));
-    set32BitValue((buf_dest + WAV_POS_DATA_SIZE), (frame * 4));
+    memcpy(buf_dest, volca_constants::wav_header, sizeof(volca_constants::wav_header));
+    volca_helper_functions::set32BitValue((buf_dest + WAV_POS_RIFF_SIZE), (frame * 4 + 0x24));
+    volca_helper_functions::set32BitValue((buf_dest + WAV_POS_DATA_SIZE), (frame * 4));
     
-    write_pos = sizeof(wav_header);
+    write_pos = sizeof(volca_constants::wav_header);
     while(frame) {
         SyroVolcaSample_GetSample(handle, &left, &right);
         buf_dest[write_pos++] = (uint8_t)left;
@@ -138,7 +93,7 @@ static int constructSyroStream(const char *filename)
     SyroVolcaSample_End(handle);
     freeSyroData(syroData, numOfData);
     
-    if(writeFile(filename, buf_dest, size_dest))
+    if(volca_helper_functions::writeFile(filename, buf_dest, size_dest))
         printf("Conversion complete\n");
     
     free(buf_dest);
