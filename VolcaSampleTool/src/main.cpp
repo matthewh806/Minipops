@@ -10,6 +10,7 @@
 #include "korg_syro_volcasample.h"
 #include "helper_functions.hpp"
 #include <SDL2/SDL.h>
+#include "../include/args.hxx" // TODO: Fix this path
 
 #define WAV_POS_RIFF_SIZE 0x04
 #define WAV_POS_DATA_SIZE 0x28
@@ -155,15 +156,36 @@ int playbackAudio(const char *filename)
 }
 
 int main(int argc, const char * argv[]) {
-    if(argc != 2) {
-        printf(" Syntax: >%s output.wav \n", argv[0]);
+    
+    args::ArgumentParser parser("Simple tool for transferring samples to Korg Volca Sample");
+    args::Group commands(parser, "commands");
+    args::Command add(commands, "load", "Loads a single or multiple samples onto device");
+    args::Command remove(commands, "remove", "Remove a single or multiple samples from device");
+    args::HelpFlag help(parser, "help", "", {'h', "help"});
+    args::CompletionFlag completion(parser, {"complete"});
+    
+    try
+    {
+        parser.ParseCLI(argc, argv);
+        
+        if(add) {
+            std::cout << "I haven't added (haha!) this yet..." << std::endl;
+            return 1;
+        } else {
+            constructSyroStream("output.wav"); // TODO: Retrieve this from CL
+        }
+    } catch(args::Help) {
+        std::cout << parser;
+        return 1;
+    } catch(args::Error& e) {
+        std::cerr << e.what() << std::endl << parser;
         return 1;
     }
+
+//    if(constructSyroStream("output.wav")) {
+//        printf("Error constructing SyroStream! \n");
+//        return 1;
+//    }
     
-    if(constructSyroStream(argv[1]) == 1) {
-        printf("Error constructing SyroStream! \n");
-        return 1;
-    }
-    
-    return playbackAudio(argv[1]);
+    return playbackAudio("output.wav");
 }
