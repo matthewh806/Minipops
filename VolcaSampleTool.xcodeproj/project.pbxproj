@@ -7,10 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		345865A92150D77300496A95 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 345865A82150D77300496A95 /* main.cpp */; };
-		34AE84792150D9200064B903 /* korg_syro_volcasample.c in Sources */ = {isa = PBXBuildFile; fileRef = 34AE84732150D9200064B903 /* korg_syro_volcasample.c */; };
-		34AE847A2150D9200064B903 /* korg_syro_comp.c in Sources */ = {isa = PBXBuildFile; fileRef = 34AE84752150D9200064B903 /* korg_syro_comp.c */; };
-		34AE847B2150D9200064B903 /* korg_syro_func.c in Sources */ = {isa = PBXBuildFile; fileRef = 34AE84772150D9200064B903 /* korg_syro_func.c */; };
+		34365395215829D60073936C /* korg_syro_volcasample.c in Sources */ = {isa = PBXBuildFile; fileRef = 3436538D215829D50073936C /* korg_syro_volcasample.c */; };
+		34365396215829D60073936C /* korg_syro_func.c in Sources */ = {isa = PBXBuildFile; fileRef = 3436538E215829D50073936C /* korg_syro_func.c */; };
+		34365397215829D60073936C /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 34365390215829D50073936C /* main.cpp */; };
+		34365398215829D60073936C /* korg_syro_comp.c in Sources */ = {isa = PBXBuildFile; fileRef = 34365392215829D50073936C /* korg_syro_comp.c */; };
 		34D93B6F21564BA700EA4A06 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34D93B6E21564BA700EA4A06 /* CoreFoundation.framework */; };
 		34D93B7121564BAC00EA4A06 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34D93B7021564BAC00EA4A06 /* CoreAudio.framework */; };
 		34D93DE221565DB600EA4A06 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34D93DE121565DB600EA4A06 /* Accelerate.framework */; };
@@ -30,15 +30,15 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		3436538D215829D50073936C /* korg_syro_volcasample.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = korg_syro_volcasample.c; path = src/korg_syro_volcasample.c; sourceTree = "<group>"; };
+		3436538E215829D50073936C /* korg_syro_func.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = korg_syro_func.c; path = src/korg_syro_func.c; sourceTree = "<group>"; };
+		3436538F215829D50073936C /* korg_syro_comp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = korg_syro_comp.h; path = src/korg_syro_comp.h; sourceTree = "<group>"; };
+		34365390215829D50073936C /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = src/main.cpp; sourceTree = "<group>"; };
+		34365391215829D50073936C /* korg_syro_type.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = korg_syro_type.h; path = src/korg_syro_type.h; sourceTree = "<group>"; };
+		34365392215829D50073936C /* korg_syro_comp.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = korg_syro_comp.c; path = src/korg_syro_comp.c; sourceTree = "<group>"; };
+		34365393215829D60073936C /* korg_syro_volcasample.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = korg_syro_volcasample.h; path = src/korg_syro_volcasample.h; sourceTree = "<group>"; };
+		34365394215829D60073936C /* korg_syro_func.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = korg_syro_func.h; path = src/korg_syro_func.h; sourceTree = "<group>"; };
 		345865A52150D77300496A95 /* VolcaSampleTool */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = VolcaSampleTool; sourceTree = BUILT_PRODUCTS_DIR; };
-		345865A82150D77300496A95 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
-		34AE84722150D9200064B903 /* korg_syro_type.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = korg_syro_type.h; sourceTree = "<group>"; };
-		34AE84732150D9200064B903 /* korg_syro_volcasample.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = korg_syro_volcasample.c; sourceTree = "<group>"; };
-		34AE84742150D9200064B903 /* korg_syro_volcasample.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = korg_syro_volcasample.h; sourceTree = "<group>"; };
-		34AE84752150D9200064B903 /* korg_syro_comp.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = korg_syro_comp.c; sourceTree = "<group>"; };
-		34AE84762150D9200064B903 /* korg_syro_comp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = korg_syro_comp.h; sourceTree = "<group>"; };
-		34AE84772150D9200064B903 /* korg_syro_func.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = korg_syro_func.c; sourceTree = "<group>"; };
-		34AE84782150D9200064B903 /* korg_syro_func.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = korg_syro_func.h; sourceTree = "<group>"; };
 		34D93B6E21564BA700EA4A06 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		34D93B7021564BAC00EA4A06 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
 		34D93DDD21565D7100EA4A06 /* AudioUnit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioUnit.framework; path = System/Library/Frameworks/AudioUnit.framework; sourceTree = SDKROOT; };
@@ -80,14 +80,14 @@
 		345865A72150D77300496A95 /* VolcaSampleTool */ = {
 			isa = PBXGroup;
 			children = (
-				34AE84752150D9200064B903 /* korg_syro_comp.c */,
-				34AE84762150D9200064B903 /* korg_syro_comp.h */,
-				34AE84772150D9200064B903 /* korg_syro_func.c */,
-				34AE84782150D9200064B903 /* korg_syro_func.h */,
-				34AE84722150D9200064B903 /* korg_syro_type.h */,
-				34AE84732150D9200064B903 /* korg_syro_volcasample.c */,
-				34AE84742150D9200064B903 /* korg_syro_volcasample.h */,
-				345865A82150D77300496A95 /* main.cpp */,
+				34365392215829D50073936C /* korg_syro_comp.c */,
+				3436538F215829D50073936C /* korg_syro_comp.h */,
+				3436538E215829D50073936C /* korg_syro_func.c */,
+				34365394215829D60073936C /* korg_syro_func.h */,
+				34365391215829D50073936C /* korg_syro_type.h */,
+				3436538D215829D50073936C /* korg_syro_volcasample.c */,
+				34365393215829D60073936C /* korg_syro_volcasample.h */,
+				34365390215829D50073936C /* main.cpp */,
 			);
 			path = VolcaSampleTool;
 			sourceTree = "<group>";
@@ -160,10 +160,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				345865A92150D77300496A95 /* main.cpp in Sources */,
-				34AE847A2150D9200064B903 /* korg_syro_comp.c in Sources */,
-				34AE84792150D9200064B903 /* korg_syro_volcasample.c in Sources */,
-				34AE847B2150D9200064B903 /* korg_syro_func.c in Sources */,
+				34365396215829D60073936C /* korg_syro_func.c in Sources */,
+				34365397215829D60073936C /* main.cpp in Sources */,
+				34365395215829D60073936C /* korg_syro_volcasample.c in Sources */,
+				34365398215829D60073936C /* korg_syro_comp.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
