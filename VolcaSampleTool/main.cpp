@@ -88,13 +88,13 @@ static uint8_t *audioPos;
 static uint32_t audioLen;
 
 
-void AudioCallback(void *userData, Uint8 *stream, int len)
+void AudioCallback(void *userData, uint8_t *stream, int len)
 {
     if(audioLen == 0)
         return;
     
     len = (len > audioLen) ? audioLen : len;
-    SDL_MixAudio(stream, audioPos, len, SDL_MIX_MAXVOLUME);
+    SDL_memcpy(stream, audioPos, len);
     
     audioPos += len;
     audioLen -= len;
