@@ -9,6 +9,7 @@
 #include <iostream>
 #include "korg_syro_volcasample.h"
 #include "maximilian.h"
+#include "StreamSample.hpp"
 
 #define WAV_POS_RIFF_SIZE 0x04
 #define WAV_POS_DATA_SIZE 0x28
@@ -28,6 +29,12 @@ static const uint8_t wav_header[] = {
     'd',  'a',  't',  'a',        // 'data'
     0x00, 0x00, 0x00, 0x00        // data size(bytes)
 };
+
+int maxiSettings::sampleRate = 44100;
+int maxiSettings::channels = 2;
+int maxiSettings::bufferSize = 1024;
+
+StreamSample sampleStream;
 
 static void set32BitValue(uint8_t *ptr, uint32_t dat)
 {
