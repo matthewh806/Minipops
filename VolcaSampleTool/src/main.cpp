@@ -30,17 +30,17 @@ static void freeSyroData(SyroData *syro_data, int num_of_data)
     }
 }
 
-static void constructDeleteData(SyroData *syro_data)
+static void constructDeleteData(SyroData *syro_data, int number)
 {
     syro_data->DataType = DataType_Sample_Erase;
     syro_data->pData = NULL;
-    syro_data->Number = 0;
+    syro_data->Number = number;
     syro_data->Size = 0;
     
     syro_data++;
 }
 
-static int constructSyroStream(const char *filename)
+static int constructSyroStream(const char *out_filename, SyroDataType data_type, int count)
 {
     // 1.prepare the data to be converted
     // 2.call the conversion start function
@@ -56,7 +56,15 @@ static int constructSyroStream(const char *filename)
     uint32_t size_dest, write_pos;
     int16_t left, right;
     
-    constructDeleteData(syroData);
+    for(int i = 0; i < count; i++) {
+        switch (data_type) {
+            case DataType_Sample_Erase:
+                constructDeleteData(syroData, i);
+                break;
+            default:
+                break;
+        }
+    }
     
     status = SyroVolcaSample_Start(&handle, syroData, numOfData, 0, &frame);
     if(status != Status_Success) {
@@ -70,7 +78,7 @@ static int constructSyroStream(const char *filename)
     
     buf_dest = (uint8_t*) malloc(size_dest);
     if(!buf_dest) {
-        printf(" Not enough memory for wtite file.\n");
+        printf(" Not enough memory for write file.\n");
         SyroVolcaSample_End(handle);
         freeSyroData(syroData, numOfData);
         
@@ -94,7 +102,7 @@ static int constructSyroStream(const char *filename)
     SyroVolcaSample_End(handle);
     freeSyroData(syroData, numOfData);
     
-    if(volca_helper_functions::writeFile(filename, buf_dest, size_dest))
+    if(volca_helper_functions::writeFile(out_filename, buf_dest, size_dest))
         printf("Conversion complete\n");
     
     free(buf_dest);
@@ -155,25 +163,34 @@ int playbackAudio(const char *filename)
     return 0;
 }
 
+void Add(const std::string &prog_name, std::vector<std::string>::const_iterator begin_args, std::vector<std::string>::const_iterator end_args);
+void Delete(const std::string &prog_name, std::vector<std::string>::const_iterator begin_args, std::vector<std::string>::const_iterator end_args);
+
+using commandType = std::function<void(const std::string &, std::vector<std::string>::const_iterator, std::vector<std::string>::const_iterator)>;
+
 int main(int argc, const char * argv[]) {
     
-    args::ArgumentParser parser("Simple tool for transferring samples to Korg Volca Sample");
-    args::Group commands(parser, "commands");
-    args::Command add(commands, "load", "Loads a single or multiple samples onto device");
-    args::Command remove(commands, "remove", "Remove a single or multiple samples from device");
-    args::HelpFlag help(parser, "help", "", {'h', "help"});
-    args::CompletionFlag completion(parser, {"complete"});
+    std::unordered_map<std::string, commandType> map {
+        {"add", Add},
+        {"delete", Delete}
+    };
     
+    const std::vector<std::string> args(argv + 1, argv + argc);
+    args::ArgumentParser parser("Simple tool for transferring samples to Korg Volca Sample");
+    args::HelpFlag help(parser, "help", "", {'h', "help"});
+    parser.Prog(argv[0]);
+    parser.ProglinePostfix("{Command options}");
+    args::MapPositional<std::string, commandType> command(parser, "command", "command to execute", map);
+
     try
     {
-        parser.ParseCLI(argc, argv);
+        auto next = parser.ParseArgs(args);
+        std::cout << " Hello, welcome to VoLCA TOoOOoooOL!" << std::endl;
         
-        if(add) {
-            std::cout << "I haven't added (haha!) this yet..." << std::endl;
-            return 1;
-        } else {
-            constructSyroStream("output.wav"); // TODO: Retrieve this from CL
+        if(command) {
+            args::get(command)(argv[0], next, std::end(args));
         }
+        
     } catch(args::Help) {
         std::cout << parser;
         return 1;
@@ -189,3 +206,15 @@ int main(int argc, const char * argv[]) {
     
     return playbackAudio("output.wav");
 }
+
+void Add(const std::string &prog_name, std::vector<std::string>::const_iterator begin_args, std::vector<std::string>::const_iterator end_args)
+{
+    std::cout << " Add me up and up and up!" << std::endl;
+}
+
+void Delete(const std::string &prog_name, std::vector<std::string>::const_iterator begin_args, std::vector<std::string>::const_iterator end_args)
+{
+    std::cout << " Leave me out to rot and die..." << std::endl;
+    constructSyroStream("output.wav", DataType_Sample_Erase, 2);
+}
+
