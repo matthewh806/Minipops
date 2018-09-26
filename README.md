@@ -15,6 +15,16 @@ I am currently making use of two libraries:
 
 - [args](https://github.com/Taywee/args) which is a simple header-only C++ argument parser library (similar to [argparse](https://docs.python.org/3/library/argparse.html) in Python). Because this is a header only library, its included in its entirety in the Include directory.
 
+### Compiling
+#### Xcode
+The provided Xcode project should work out of the box. Just open and hit run!
+
+#### Makefile
+I've included a very simple Makefile, I've only tested against macOS and it uses both clang (for C compilation) and clang++ (for C++ compilation and C obj file linking).
+
+Just run `make` at the command line and see what happens!
+
+
 ## Running examples
 -- TODO -- 
 
