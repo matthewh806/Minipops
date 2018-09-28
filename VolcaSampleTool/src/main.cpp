@@ -40,7 +40,7 @@ static void constructDeleteData(SyroData *syro_data, int number)
     syro_data++;
 }
 
-static int constructSyroStream(const char *out_filename, SyroDataType data_type, int count)
+static int constructSyroStream(const char *out_filename, SyroDataType data_type, std::vector<int> slots) 
 {
     // 1.prepare the data to be converted
     // 2.call the conversion start function
@@ -55,12 +55,17 @@ static int constructSyroStream(const char *out_filename, SyroDataType data_type,
     uint8_t *buf_dest;
     uint32_t size_dest, write_pos;
     int16_t left, right;
+
+    auto count = slots.size();
+
+    std::cout << " operating on " << count << " slots" << std::endl;
     
     for(int i = 0; i < count; i++) {
-        std::cout << i << std::endl;
         switch (data_type) {
             case DataType_Sample_Erase:
-                constructDeleteData(syroData, i);
+                std::cout << "constructing delete data for slot: " << slots[i] << std::endl;
+                constructDeleteData(syroData, slots[i]);
+                std::cout << "goodbye little sample :'(" << std::endl;
                 break;
             default:
                 break;
@@ -177,16 +182,18 @@ int main(int argc, const char * argv[]) {
     };
     
     const std::vector<std::string> args(argv + 1, argv + argc);
-    args::ArgumentParser parser("Simple tool for transferring samples to Korg Volca Sample");
-    args::HelpFlag help(parser, "help", "", {'h', "help"});
+    args::ArgumentParser parser("Hello, welcome to VoLCA TOoOOoooOL!", "Valid commands are add and delete");
+    args::HelpFlag help(parser, "help", "Display this help menu", {'h', "help"});
     parser.Prog(argv[0]);
     parser.ProglinePostfix("{Command options}");
-    args::MapPositional<std::string, commandType> command(parser, "command", "command to execute", map);
+    args::Flag auto_play(parser, "auto play", "If this flag is set autoplay the generated syro stream", {'a', "auto"});
+    args::MapPositional<std::string, commandType> command(parser, "command", "command to execute {add, delete}", map);
+    command.KickOut(true);
 
     try
     {
         auto next = parser.ParseArgs(args);
-        std::cout << " Hello, welcome to VoLCA TOoOOoooOL!" << std::endl;
+        std::cout << std::boolalpha;
         
         if(command) {
             args::get(command)(argv[0], next, std::end(args));
@@ -202,21 +209,9 @@ int main(int argc, const char * argv[]) {
         return 1;
     }
 
-//    if(constructSyroStream("output.wav")) {
-//        printf("Error constructing SyroStream! \n");
-//        return 1;
-//    }
-    
-    return playbackAudio("output.wav");
-}
+    if(auto_play) return playbackAudio("output.wav");
 
-void Add(const std::string &prog_name, std::vector<std::string>::const_iterator begin_args, std::vector<std::string>::const_iterator end_args)
-{
-    std::cout << " Add me up and up and up!" << std::endl;
-    
-    args::ArgumentParser parser("");
-    parser.Prog(prog_name + "add");
-    args::HelpFlag help(parser, "help", "Display this help menu", {'h', "help"});
+    return 0;
 }
 
 void Delete(const std::string &prog_name, std::vector<std::string>::const_iterator begin_args, std::vector<std::string>::const_iterator end_args)
@@ -226,14 +221,12 @@ void Delete(const std::string &prog_name, std::vector<std::string>::const_iterat
     args::ArgumentParser parser("");
     parser.Prog(prog_name + " delete");
     args::HelpFlag help(parser, "help", "Display this help menu", {'h', "help"});
-    args::ValueFlag<int> integer(parser, "integer", "How many to delete", {'i'});
+    args::PositionalList<int> slots(parser, "samples", "The numbers of the sample slots to delete (0-based)");
     
     try
     {
         parser.ParseArgs(begin_args, end_args);
-        
-        std::cout << " number to delete: " << integer << std::endl;
-        constructSyroStream("output.wav", DataType_Sample_Erase, integer);
+        constructSyroStream("output.wav", DataType_Sample_Erase, args::get(slots));
     } catch(args::Help) {
         std::cout << parser;
         return;
@@ -244,3 +237,23 @@ void Delete(const std::string &prog_name, std::vector<std::string>::const_iterat
     }
 }
 
+void Add(const std::string &prog_name, std::vector<std::string>::const_iterator begin_args, std::vector<std::string>::const_iterator end_args)
+{
+    std::cout << " Add me up and up and up!" << std::endl;
+    args::ArgumentParser parser("");
+    parser.Prog(prog_name + " add");
+    args::HelpFlag help(parser, "help", "Display this help menu", {'h', "help"});
+
+    try
+    {
+        parser.ParseArgs(begin_args, end_args);
+        std::cout << " Why implement the CLI before the feature I hear you ask...? Good question" << std::endl;
+    } catch(args::Help) {
+        std::cout << parser;
+        return;
+    } catch(args::ParseError e) {
+        std::cerr << e.what() << std::endl;
+        std::cerr << parser;
+        return;
+    }
+}

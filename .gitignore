@@ -60,3 +60,6 @@ DerivedData/
 
 # ----- vim ---------
 *.swp
+
+# ----- output ------
+*.wav

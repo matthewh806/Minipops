@@ -1,6 +1,7 @@
+PROJECT = volcatool
 IDIR = include
 CXX=clang++
-CXXFLAGS +=-Iinclude -Wc++11-extensions -std=c++11
+CXXFLAGS +=-I./include -Wc++11-extensions -std=c++11
 CC=clang
 CFLAGS=-Wall
 
@@ -14,13 +15,14 @@ CXXSOURCES += $(wildcard src/*.cpp src/*/*.cpp)
 CSOURCES += $(wildcard src/*.c src/*/*.c)
 OBJECTS = $(SOURCES:.cpp=.o .c=o)
 
-all: volcatool
+all: $(PROJECT)
 
-volcatool:
+$(PROJECT):
 	$(MKDIR)
 	$(CC) $(CSOURCES) $(CFLAGS) -c
-	$(CXX) -o $(OUTPUTDIR)/VolcaTool $(CXXFLAGS) $(LDFLAGS) *.o $(CXXSOURCES) 
+	$(CXX) -o $(OUTPUTDIR)/$(PROJECT) $(CXXFLAGS) $(LDFLAGS) *.o $(CXXSOURCES) 
 
+.PHONY : clean
 clean:
 	rm -rf $(OUTPUTDIR) *.o
 
