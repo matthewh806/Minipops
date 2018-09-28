@@ -221,7 +221,7 @@ void Delete(const std::string &prog_name, std::vector<std::string>::const_iterat
     args::ArgumentParser parser("");
     parser.Prog(prog_name + " delete");
     args::HelpFlag help(parser, "help", "Display this help menu", {'h', "help"});
-    args::PositionalList<int> slots(parser, "samples", "The numbers of the sample slots to delete (0-based)");
+    args::PositionalList<int> slots(parser, "slots", "The numbers of the sample slots to delete (0-based)");
     
     try
     {
@@ -243,6 +243,13 @@ void Add(const std::string &prog_name, std::vector<std::string>::const_iterator 
     args::ArgumentParser parser("");
     parser.Prog(prog_name + " add");
     args::HelpFlag help(parser, "help", "Display this help menu", {'h', "help"});
+    args::PositionalList<int> slots(parser, "slots", "The numbers of the sample slots to add the samples (0-based)");
+
+    // TODO: Mutually exclusive arguments: individual files, directories.
+    //
+    // Pattern?
+    // Directories should just take a start argument and end be determined by the number of files in dir
+    // Individual files should be specified as filename.wav and index if possible?
 
     try
     {
