@@ -57,6 +57,7 @@ static int constructSyroStream(const char *out_filename, SyroDataType data_type,
     int16_t left, right;
     
     for(int i = 0; i < count; i++) {
+        std::cout << i << std::endl;
         switch (data_type) {
             case DataType_Sample_Erase:
                 constructDeleteData(syroData, i);
@@ -189,11 +190,13 @@ int main(int argc, const char * argv[]) {
         
         if(command) {
             args::get(command)(argv[0], next, std::end(args));
+        } else {
+            std::cout << parser;
+            return 0;
         }
-        
     } catch(args::Help) {
         std::cout << parser;
-        return 1;
+        return 0;
     } catch(args::Error& e) {
         std::cerr << e.what() << std::endl << parser;
         return 1;
@@ -210,11 +213,34 @@ int main(int argc, const char * argv[]) {
 void Add(const std::string &prog_name, std::vector<std::string>::const_iterator begin_args, std::vector<std::string>::const_iterator end_args)
 {
     std::cout << " Add me up and up and up!" << std::endl;
+    
+    args::ArgumentParser parser("");
+    parser.Prog(prog_name + "add");
+    args::HelpFlag help(parser, "help", "Display this help menu", {'h', "help"});
 }
 
 void Delete(const std::string &prog_name, std::vector<std::string>::const_iterator begin_args, std::vector<std::string>::const_iterator end_args)
 {
     std::cout << " Leave me out to rot and die..." << std::endl;
-    constructSyroStream("output.wav", DataType_Sample_Erase, 2);
+    
+    args::ArgumentParser parser("");
+    parser.Prog(prog_name + " delete");
+    args::HelpFlag help(parser, "help", "Display this help menu", {'h', "help"});
+    args::ValueFlag<int> integer(parser, "integer", "How many to delete", {'i'});
+    
+    try
+    {
+        parser.ParseArgs(begin_args, end_args);
+        
+        std::cout << " number to delete: " << integer << std::endl;
+        constructSyroStream("output.wav", DataType_Sample_Erase, integer);
+    } catch(args::Help) {
+        std::cout << parser;
+        return;
+    } catch(args::ParseError e) {
+        std::cerr << e.what() << std::endl;
+        std::cerr << parser;
+        return;
+    }
 }
 
