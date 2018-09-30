@@ -10,6 +10,9 @@
 #define helper_functions_hpp
 
 #include <iostream>
+#include <sys/types.h>
+#include <dirent.h>
+#include <vector>
 
 namespace volca_constants {
     static const uint8_t wav_header[] = {
@@ -67,6 +70,16 @@ namespace volca_helper_functions {
             *ptr++ = (uint8_t)dat;
             dat >>= 8;
         }
+    }
+    
+    void readDirectory(const char *dirname, std::vector<std::string>& v)
+    {
+        DIR* dirp = opendir(dirname);
+        struct dirent *dp;
+        while ((dp = readdir(dirp)) != NULL) {
+            v.push_back(dp->d_name);
+        }
+        closedir(dirp);
     }
 
     static uint8_t *readFile(const char *filename, uint32_t *p_size)

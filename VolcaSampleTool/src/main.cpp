@@ -22,6 +22,22 @@
 #define WAV_POS_WAVEFMT   0x08
 #define WAV_POS_DATA_SIZE 0x28
 
+static bool isRegularFile(const char *path)
+{
+    struct stat path_stat;
+    stat(path, &path_stat);
+    
+    return S_ISREG(path_stat.st_mode);
+}
+
+static bool isDirectory(const char *path)
+{
+    struct stat path_stat;
+    stat(path, &path_stat);
+    
+    return S_ISDIR(path_stat.st_mode);
+}
+
 static void freeSyroData(SyroData *syro_data, int num_of_data)
 {
     int i;
@@ -185,14 +201,32 @@ static bool setupSampleFile(const char *filename, SyroData *syroData)
 
 static void constructAddData(SyroData *syro_data, const char *filename, int number)
 {
-    std::cout << "constructing add data for: " << filename << std::endl;
-
-    syro_data->DataType = DataType_Sample_Compress;
-    syro_data->Quality = 16;
-    syro_data->Number = number;
-    setupSampleFile(filename, syro_data);
-
-    syro_data++;
+    std::cout << "is directory: " << isDirectory(filename) << std::endl;
+    std::cout << "is file: " << isRegularFile(filename) << std::endl;
+    
+    std::vector<std::string> files; // TODO: Check for wav type...
+    
+    if(isDirectory(filename)) {
+        volca_helper_functions::readDirectory(filename, files);
+    } else if (isRegularFile(filename)) {
+        files.push_back(filename);
+    } else {
+        // oh dear...
+    }
+    
+    number = files.size();
+    
+    for(int i = 0; i < number; i++) {
+        
+        std::cout << "constructing add data for: " << files[i] << std::endl;
+        
+        syro_data->DataType = DataType_Sample_Compress;
+        syro_data->Quality = 16;
+        syro_data->Number = i;
+        setupSampleFile(files[i].c_str(), syro_data);
+        
+        syro_data++;
+    }
 }
 
 static int constructSyroStream(const char *out_filename, const char *in_files, SyroDataType data_type, std::vector<int> slots) 
@@ -216,7 +250,6 @@ static int constructSyroStream(const char *out_filename, const char *in_files, S
     std::cout << " operating on " << count << " slots" << std::endl;
 
     // in_files is only valid for adding not deleting
-    
     for(int i = 0; i < count; i++) {
         switch (data_type) {
             case DataType_Sample_Erase:
