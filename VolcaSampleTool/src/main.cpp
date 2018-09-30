@@ -226,7 +226,7 @@ static int constructSyroStream(const char *out_filename, const char *in_files, S
                 break;
             case DataType_Sample_Compress:
                 std::cout << "constructing add data for slot: " << slots[i] << std::endl;
-                constructAddData(syroData, "braces-001.wav", slots[i]);
+                constructAddData(syroData, in_files, slots[i]);
                 break;
             default:
                 break;
