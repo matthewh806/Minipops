@@ -31,6 +31,34 @@ namespace volca_constants {
 
 namespace volca_helper_functions {
     
+    static uint16_t get16BitValue(uint8_t *ptr) 
+    {
+        uint16_t dat;
+
+        // TODO: wtf is going on here
+        dat = (uint16_t)ptr[1];
+        dat <<= 8;
+        dat |= (uint16_t)ptr[0];
+
+        return dat;
+    }
+
+    static uint32_t get32BitValue(uint8_t *ptr)
+    {
+        int i;
+        uint32_t dat;
+
+        dat = 0;
+
+        for(i=0; i < 4; i++) 
+        {
+            dat <<= 8;
+            dat |= (uint32_t)ptr[3-i];
+        }
+
+        return dat;
+    }
+
     static void set32BitValue(uint8_t *ptr, uint32_t dat)
     {
         // TODO: Don't you dare delete this comment until you understand this code!!
@@ -39,6 +67,42 @@ namespace volca_helper_functions {
             *ptr++ = (uint8_t)dat;
             dat >>= 8;
         }
+    }
+
+    static uint8_t *readFile(const char *filename, uint32_t *p_size)
+    {
+        FILE *fp;
+        uint8_t *buf;
+        uint32_t size;
+
+        fp = fopen(filename, "rb");
+        if(!fp) {
+            printf(" File open error, %s \n", filename);
+            return NULL;
+        }
+         
+        fseek(fp, 0, SEEK_END);
+	    size = ftell(fp);
+	    fseek(fp, 0, SEEK_SET);
+        
+        buf = (uint8_t*)malloc(size);
+	    if (!buf) {
+		    printf (" Not enough memory for read file.\n");
+		    fclose(fp);
+		    return NULL;
+	    }
+
+	    if (fread(buf, 1, size, fp) < size) {
+		    printf (" File read error, %s \n", filename);
+		    fclose(fp);
+		    free(buf);
+		    return NULL;
+	    }
+
+	    fclose(fp);
+
+	    *p_size = size;
+	    return buf;
     }
     
     static bool writeFile(const char *filename, uint8_t *buf, uint32_t size)

@@ -10,9 +10,16 @@
 #include "korg_syro_volcasample.h"
 #include "helper_functions.hpp"
 #include <SDL2/SDL.h>
+#include <sys/stat.h>
 #include "../include/args.hxx" // TODO: Fix this path
 
+#define WAVFMT_POS_ENCODE	0x00
+#define WAVFMT_POS_CHANNEL	0x02
+#define WAVFMT_POS_FS		0x04
+#define WAVFMT_POS_BIT		0x0E
+
 #define WAV_POS_RIFF_SIZE 0x04
+#define WAV_POS_WAVEFMT   0x08
 #define WAV_POS_DATA_SIZE 0x28
 
 static void freeSyroData(SyroData *syro_data, int num_of_data)
@@ -40,7 +47,85 @@ static void constructDeleteData(SyroData *syro_data, int number)
     syro_data++;
 }
 
-static int constructSyroStream(const char *out_filename, SyroDataType data_type, std::vector<int> slots) 
+static bool setupSampleFile(const char *filename, SyroData *syroData)
+{
+    uint8_t *src;
+    uint32_t wav_pos, size;
+    uint32_t wav_fs;
+    uint16_t num_of_ch, sample_byte;
+    uint32_t num_of_frame;
+
+    src = volca_helper_functions::readFile(filename, &size); 
+    if(!src) {
+        return false;
+    }
+
+    if(size <= sizeof(volca_constants::wav_header)) {
+        printf("wav file error, too small. \n");
+        free(src);
+        return false;
+    }
+
+    // check header, fmt
+    if(memcmp(src, volca_constants::wav_header, 4)) {
+        printf("wav file error, 'RIFF' is not found.\n");
+        free(src);
+        return false;
+    }
+
+    if (memcmp((src + WAV_POS_WAVEFMT), (volca_constants::wav_header + WAV_POS_WAVEFMT), 8)) {
+		printf ("wav file error, 'WAVE' or 'fmt ' is not found.\n");
+		free(src);
+		return false;
+	}
+
+    wav_pos = WAV_POS_WAVEFMT + 4;
+
+    if(volca_helper_functions::get16BitValue(src + wav_pos + 8 + WAVFMT_POS_ENCODE) != 1) {
+        printf("wav file error, encode must be '1'. \n");
+        free(src);
+        return false;
+    }
+
+    num_of_ch = volca_helper_functions::get16BitValue(src + wav_pos + 8 + WAVFMT_POS_CHANNEL);
+    if((num_of_ch != 1) && (num_of_ch !=2)) {
+        printf("wav file error, channel must be 1 or 2.\n");
+        free(src);
+        return false;
+    }
+
+    {
+        uint16_t num_of_bit;
+
+        num_of_bit = volca_helper_functions::get16BitValue(src + wav_pos + 8 + WAVFMT_POS_BIT);
+        if((num_of_bit != 16) && (num_of_bit != 24)) {
+            printf("wav file error, bit must be 16 or 24.\n");
+            free(src);
+            return false;
+        }
+
+        sample_byte = (num_of_bit / 8);
+    }
+
+    wav_fs = volca_helper_functions::get32BitValue(src + wav_pos + 8 + WAVFMT_POS_FS);
+
+    // TODO: Search data
+    // TODO: Setup - convert to 16Bit, 1 ch
+
+    return true;
+}
+
+static void constructAddData(SyroData *syro_data, const char *filename, int number)
+{
+    std::cout << "constructing add data for: " << filename << std::endl;
+
+    syro_data->DataType = DataType_Sample_Compress;
+    setupSampleFile(filename, syro_data);
+
+    syro_data++;
+}
+
+static int constructSyroStream(const char *out_filename, const char *in_files, SyroDataType data_type, std::vector<int> slots) 
 {
     // 1.prepare the data to be converted
     // 2.call the conversion start function
@@ -59,6 +144,8 @@ static int constructSyroStream(const char *out_filename, SyroDataType data_type,
     auto count = slots.size();
 
     std::cout << " operating on " << count << " slots" << std::endl;
+
+    // in_files is only valid for adding not deleting
     
     for(int i = 0; i < count; i++) {
         switch (data_type) {
@@ -66,6 +153,10 @@ static int constructSyroStream(const char *out_filename, SyroDataType data_type,
                 std::cout << "constructing delete data for slot: " << slots[i] << std::endl;
                 constructDeleteData(syroData, slots[i]);
                 std::cout << "goodbye little sample :'(" << std::endl;
+                break;
+            case DataType_Sample_Compress:
+                std::cout << "constructing add data for slot: " << slots[i] << std::endl;
+                constructAddData(syroData, "909_kick.wav", slots[i]);
                 break;
             default:
                 break;
@@ -226,7 +317,7 @@ void Delete(const std::string &prog_name, std::vector<std::string>::const_iterat
     try
     {
         parser.ParseArgs(begin_args, end_args);
-        constructSyroStream("output.wav", DataType_Sample_Erase, args::get(slots));
+        constructSyroStream("output.wav", nullptr, DataType_Sample_Erase, args::get(slots));
     } catch(args::Help) {
         std::cout << parser;
         return;
@@ -243,6 +334,7 @@ void Add(const std::string &prog_name, std::vector<std::string>::const_iterator 
     args::ArgumentParser parser("");
     parser.Prog(prog_name + " add");
     args::HelpFlag help(parser, "help", "Display this help menu", {'h', "help"});
+    args::Positional<std::string> samples(parser, "samples", "The sample(s) to load. Can be a file or directory (.wav format)");
     args::PositionalList<int> slots(parser, "slots", "The numbers of the sample slots to add the samples (0-based)");
 
     // TODO: Mutually exclusive arguments: individual files, directories.
@@ -255,6 +347,7 @@ void Add(const std::string &prog_name, std::vector<std::string>::const_iterator 
     {
         parser.ParseArgs(begin_args, end_args);
         std::cout << " Why implement the CLI before the feature I hear you ask...? Good question" << std::endl;
+        constructSyroStream("output.wav", args::get(samples).c_str(), DataType_Sample_Compress, args::get(slots));
     } catch(args::Help) {
         std::cout << parser;
         return;
