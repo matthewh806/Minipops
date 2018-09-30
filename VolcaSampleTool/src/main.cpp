@@ -51,6 +51,7 @@ static bool setupSampleFile(const char *filename, SyroData *syroData)
 {
     uint8_t *src;
     uint32_t wav_pos, size;
+    uint32_t chunk_size;
     uint32_t wav_fs;
     uint16_t num_of_ch, sample_byte;
     uint32_t num_of_frame;
@@ -108,10 +109,77 @@ static bool setupSampleFile(const char *filename, SyroData *syroData)
     }
 
     wav_fs = volca_helper_functions::get32BitValue(src + wav_pos + 8 + WAVFMT_POS_FS);
-
-    // TODO: Search data
-    // TODO: Setup - convert to 16Bit, 1 ch
-
+    
+    // search for data
+    for(;;) {
+        chunk_size = volca_helper_functions::get32BitValue(src + wav_pos + 4);
+        if(!memcmp((src+wav_pos), "data", 4)) {
+            break;
+        }
+        
+        wav_pos += chunk_size + 8;
+        if((wav_pos + 8) > size) {
+            printf("wav file error, 'data' chunk not found. \n");
+            free(src);
+            return false;
+        }
+    }
+    
+    if((wav_pos + chunk_size + 8) > size) {
+        printf("wav file error, illegal 'data' chunk size. \n");
+        free(src);
+        return false;
+    }
+    
+    num_of_frame = chunk_size / (num_of_ch * sample_byte);
+    chunk_size = (num_of_frame * 2); // I think this is to convert to 16bit (2*2byte) 1 ch
+    syroData->pData = (uint8_t *)malloc(chunk_size);
+    if(!syroData->pData) {
+        printf("Not enough memory to setup file. \n");
+        free(src);
+        return false;
+    }
+    
+    {
+        uint8_t *poss;
+        int16_t *posd;
+        int32_t dat, datf;
+        uint16_t ch, sbyte;
+        
+        poss = (src + wav_pos + 8); // src + wav_pos should point to 'd' now -> so + 8 skips over 'd','a','t','a' and data size block
+        posd = (int16_t *)syroData->pData;
+        
+        // Convert to 1 channel, 16Bit
+        for(;;) {
+            datf = 0;
+            
+            for(ch=0; ch < num_of_ch; ch++) {
+                dat = ((int8_t *)poss)[sample_byte-1];
+                for(sbyte=1; sbyte < sample_byte; sbyte++) {
+                    dat <<= 8;
+                    dat |= poss[sample_byte - 1 - sbyte];
+                }
+                
+                poss += sample_byte;
+                datf += dat;
+            }
+            
+            datf /= num_of_ch;
+            *posd++ = (int16_t)datf;
+            
+            if(!(--num_of_frame))
+                break;
+        }
+    }
+    
+    syroData->Size = chunk_size;
+    syroData->Fs = wav_fs;
+    syroData->SampleEndian = LittleEndian;
+    
+    free(src);
+    
+    printf("Prepared sample ok!\n");
+    
     return true;
 }
 
@@ -120,6 +188,8 @@ static void constructAddData(SyroData *syro_data, const char *filename, int numb
     std::cout << "constructing add data for: " << filename << std::endl;
 
     syro_data->DataType = DataType_Sample_Compress;
+    syro_data->Quality = 16;
+    syro_data->Number = number;
     setupSampleFile(filename, syro_data);
 
     syro_data++;
@@ -156,7 +226,7 @@ static int constructSyroStream(const char *out_filename, const char *in_files, S
                 break;
             case DataType_Sample_Compress:
                 std::cout << "constructing add data for slot: " << slots[i] << std::endl;
-                constructAddData(syroData, "909_kick.wav", slots[i]);
+                constructAddData(syroData, "braces-001.wav", slots[i]);
                 break;
             default:
                 break;
