@@ -300,11 +300,12 @@ static int constructSyroStream(const char *out_filename, const char *in_files, S
     }
     
     SyroVolcaSample_End(handle);
-    freeSyroData(syroData, numOfData);
     
     if(volca_helper_functions::writeFile(out_filename, buf_dest, size_dest))
         printf("Conversion complete\n");
     
+    // TODO: Moved this to avoid a bug, fix properly!
+//    freeSyroData(syroData, numOfData);
     free(buf_dest);
     
     return 0;
@@ -363,10 +364,10 @@ int playbackAudio(const char *filename)
     return 0;
 }
 
-void Add(const std::string &prog_name, std::vector<std::string>::const_iterator begin_args, std::vector<std::string>::const_iterator end_args);
-void Delete(const std::string &prog_name, std::vector<std::string>::const_iterator begin_args, std::vector<std::string>::const_iterator end_args);
+void Add(const std::string &prog_name, const char *output, std::vector<std::string>::const_iterator begin_args, std::vector<std::string>::const_iterator end_args);
+void Delete(const std::string &prog_name, const char *output, std::vector<std::string>::const_iterator begin_args, std::vector<std::string>::const_iterator end_args);
 
-using commandType = std::function<void(const std::string &, std::vector<std::string>::const_iterator, std::vector<std::string>::const_iterator)>;
+using commandType = std::function<void(const std::string &, const char *, std::vector<std::string>::const_iterator, std::vector<std::string>::const_iterator)>;
 
 int main(int argc, const char * argv[]) {
     
@@ -380,6 +381,7 @@ int main(int argc, const char * argv[]) {
     args::HelpFlag help(parser, "help", "Display this help menu", {'h', "help"});
     parser.Prog(argv[0]);
     parser.ProglinePostfix("{Command options}");
+    args::ValueFlag<std::string>output(parser, "output file", "the file to write the syrostream out to (wav)", {'o', "output"});
     args::Flag auto_play(parser, "auto play", "If this flag is set autoplay the generated syro stream", {'a', "auto"});
     args::MapPositional<std::string, commandType> command(parser, "command", "command to execute {add, delete}", map);
     command.KickOut(true);
@@ -390,7 +392,7 @@ int main(int argc, const char * argv[]) {
         std::cout << std::boolalpha;
         
         if(command) {
-            args::get(command)(argv[0], next, std::end(args));
+            args::get(command)(argv[0], args::get(output).c_str(), next, std::end(args));
         } else {
             std::cout << parser;
             return 0;
@@ -403,12 +405,15 @@ int main(int argc, const char * argv[]) {
         return 1;
     }
 
-    if(auto_play) return playbackAudio("output.wav");
+    if(auto_play) {
+        std::cout << "Prepare for audio playback! " << args::get(output).c_str() << std::endl;
+        return playbackAudio(args::get(output).c_str());
+    };
 
     return 0;
 }
 
-void Delete(const std::string &prog_name, std::vector<std::string>::const_iterator begin_args, std::vector<std::string>::const_iterator end_args)
+void Delete(const std::string &prog_name, const char *output, std::vector<std::string>::const_iterator begin_args, std::vector<std::string>::const_iterator end_args)
 {
     std::cout << " Leave me out to rot and die..." << std::endl;
     
@@ -420,7 +425,7 @@ void Delete(const std::string &prog_name, std::vector<std::string>::const_iterat
     try
     {
         parser.ParseArgs(begin_args, end_args);
-        constructSyroStream("output.wav", nullptr, DataType_Sample_Erase, args::get(slots));
+        constructSyroStream(output, nullptr, DataType_Sample_Erase, args::get(slots));
     } catch(args::Help) {
         std::cout << parser;
         return;
@@ -431,7 +436,7 @@ void Delete(const std::string &prog_name, std::vector<std::string>::const_iterat
     }
 }
 
-void Add(const std::string &prog_name, std::vector<std::string>::const_iterator begin_args, std::vector<std::string>::const_iterator end_args)
+void Add(const std::string &prog_name, const char *output, std::vector<std::string>::const_iterator begin_args, std::vector<std::string>::const_iterator end_args)
 {
     std::cout << " Add me up and up and up!" << std::endl;
     args::ArgumentParser parser("");
@@ -449,8 +454,7 @@ void Add(const std::string &prog_name, std::vector<std::string>::const_iterator 
     try
     {
         parser.ParseArgs(begin_args, end_args);
-        std::cout << " Why implement the CLI before the feature I hear you ask...? Good question" << std::endl;
-        constructSyroStream("output.wav", args::get(samples).c_str(), DataType_Sample_Compress, args::get(slots));
+        constructSyroStream(output, args::get(samples).c_str(), DataType_Sample_Compress, args::get(slots));
     } catch(args::Help) {
         std::cout << parser;
         return;
