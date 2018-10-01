@@ -14,6 +14,8 @@
 		34D93B6F21564BA700EA4A06 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34D93B6E21564BA700EA4A06 /* CoreFoundation.framework */; };
 		34D93B7121564BAC00EA4A06 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34D93B7021564BAC00EA4A06 /* CoreAudio.framework */; };
 		34D93DE221565DB600EA4A06 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34D93DE121565DB600EA4A06 /* Accelerate.framework */; };
+		34E0B7D82162D273000378BA /* syro_operations.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 34E0B7D62162D273000378BA /* syro_operations.cpp */; };
+		34E0B7DC2162DAEF000378BA /* helper_functions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 34E0B7DB2162DAEF000378BA /* helper_functions.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -45,6 +47,9 @@
 		34D93DDD21565D7100EA4A06 /* AudioUnit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioUnit.framework; path = System/Library/Frameworks/AudioUnit.framework; sourceTree = SDKROOT; };
 		34D93DDF21565D7F00EA4A06 /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreServices.framework; path = System/Library/Frameworks/CoreServices.framework; sourceTree = SDKROOT; };
 		34D93DE121565DB600EA4A06 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
+		34E0B7D62162D273000378BA /* syro_operations.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = syro_operations.cpp; path = src/syro_operations.cpp; sourceTree = "<group>"; };
+		34E0B7D72162D273000378BA /* syro_operations.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = syro_operations.hpp; path = src/syro_operations.hpp; sourceTree = "<group>"; };
+		34E0B7DB2162DAEF000378BA /* helper_functions.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = helper_functions.cpp; path = src/helper_functions.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -90,6 +95,9 @@
 				34365393215829D60073936C /* korg_syro_volcasample.h */,
 				34365390215829D50073936C /* main.cpp */,
 				3436539A215844020073936C /* helper_functions.hpp */,
+				34E0B7DB2162DAEF000378BA /* helper_functions.cpp */,
+				34E0B7D62162D273000378BA /* syro_operations.cpp */,
+				34E0B7D72162D273000378BA /* syro_operations.hpp */,
 			);
 			path = VolcaSampleTool;
 			sourceTree = "<group>";
@@ -162,10 +170,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				34E0B7D82162D273000378BA /* syro_operations.cpp in Sources */,
 				34365396215829D60073936C /* korg_syro_func.c in Sources */,
 				34365397215829D60073936C /* main.cpp in Sources */,
 				34365395215829D60073936C /* korg_syro_volcasample.c in Sources */,
 				34365398215829D60073936C /* korg_syro_comp.c in Sources */,
+				34E0B7DC2162DAEF000378BA /* helper_functions.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
