@@ -214,16 +214,16 @@ static void constructAddData(SyroData *syro_data, const char *filename, int numb
         // oh dear...
     }
     
-    number = files.size();
-    
-    for(int i = 0; i < number; i++) {
+    for(int i = 0; i < files.size(); i++) {
         
         std::cout << "constructing add data for: " << files[i] << std::endl;
         
         syro_data->DataType = DataType_Sample_Compress;
         syro_data->Quality = 16;
         syro_data->Number = i;
-        setupSampleFile(files[i].c_str(), syro_data);
+        
+        if(!setupSampleFile(files[i].c_str(), syro_data))
+            continue;
         
         syro_data++;
     }
@@ -305,7 +305,7 @@ static int constructSyroStream(const char *out_filename, const char *in_files, S
         printf("Conversion complete\n");
     
     // TODO: Moved this to avoid a bug, fix properly!
-//    freeSyroData(syroData, numOfData);
+    freeSyroData(syroData, numOfData);
     free(buf_dest);
     
     return 0;
