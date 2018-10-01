@@ -74,10 +74,17 @@ namespace volca_helper_functions {
     
     void readDirectory(const char *dirname, std::vector<std::string>& v)
     {
+        // NOTE: Includes dir in path name vector
+
+        // TODO: Bug if user doesn't give trailing slash in dir name - FIX!!
         DIR* dirp = opendir(dirname);
         struct dirent *dp;
         while ((dp = readdir(dirp)) != NULL) {
-            v.push_back(dp->d_name);
+            char path[100];
+            
+            strcpy(path, dirname);
+            strcat(path, dp->d_name);
+            v.push_back(path);
         }
         closedir(dirp);
     }
