@@ -73,6 +73,14 @@ using commandType = std::function<void(const std::string &, const char *, std::v
 
 int main(int argc, const char * argv[]) {
     
+    // TODO: Specify relative or full path at CLI
+    // TODO: pass audio buffer straight to device without saving it? (pointlessly saving and then loading saved file...)
+    // TODO: offset the value of the sample slots (currently only takes 0...x)
+    // TODO: animated ascii while waiting for playback (ask kendal maybe?)
+    // TODO: restore factory settings (will increase the download size massively unless dl'd from the internet)
+    // TODO: logging facility
+    // TODO: lots of things!!!! ^^^^^
+    
     std::unordered_map<std::string, commandType> map {
         {"add", Add},
         {"delete", Delete}
