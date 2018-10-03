@@ -10,11 +10,14 @@
 #include "korg_syro_volcasample.h"
 #include "helper_functions.hpp"
 #include <SDL2/SDL.h>
-#include "../include/args.hxx" // TODO: Fix this path
+#include "args.hxx"
+#include "spdlog/sinks/stdout_color_sinks.h"
 #include "syro_operations.hpp"
 
 static uint8_t *audioPos;
 static uint32_t audioLen;
+
+auto console = spdlog::stdout_color_mt("main");
 
 void audioCallback(void *userData, uint8_t *stream, int len)
 {
@@ -31,7 +34,7 @@ void audioCallback(void *userData, uint8_t *stream, int len)
 int playbackAudio(const char *filename)
 {
     if(SDL_Init(SDL_INIT_AUDIO) < 0) {
-        std::cerr << "Error: Could not initialize SDL" << std::endl;
+        console->error("Could not initialize SDL");
         return 1;
     }
     
@@ -40,7 +43,7 @@ int playbackAudio(const char *filename)
     uint32_t wavLength;
     
     if(SDL_LoadWAV(filename, &wavSpec, &wavStart, &wavLength) == NULL) {
-        std::cerr << "Error: File could not be loaded as an audio file" << std::endl;
+        console->error("Error: File could not be loaded as an audio file");
         return 1;
     }
     
@@ -50,7 +53,7 @@ int playbackAudio(const char *filename)
     audioLen = wavLength;
     
     if(SDL_OpenAudio(&wavSpec, NULL) < 0) {
-        std::cerr << "Error: " << SDL_GetError() << std::endl;
+        console->error(SDL_GetError());
         return 1;
     }
     
@@ -74,11 +77,11 @@ using commandType = std::function<void(const std::string &, const char *, std::v
 int main(int argc, const char * argv[]) {
     
     // TODO: Specify relative or full path at CLI
+    // TODO: Default path to save the syro stream
     // TODO: pass audio buffer straight to device without saving it? (pointlessly saving and then loading saved file...)
     // TODO: offset the value of the sample slots (currently only takes 0...x)
     // TODO: animated ascii while waiting for playback (ask kendal maybe?)
     // TODO: restore factory settings (will increase the download size massively unless dl'd from the internet)
-    // TODO: logging facility
     // TODO: lots of things!!!! ^^^^^
     
     std::unordered_map<std::string, commandType> map {
@@ -95,7 +98,7 @@ int main(int argc, const char * argv[]) {
     args::Flag auto_play(parser, "auto play", "If this flag is set autoplay the generated syro stream", {'a', "auto"});
     args::MapPositional<std::string, commandType> command(parser, "command", "command to execute {add, delete}", map);
     command.KickOut(true);
-
+    
     try
     {
         auto next = parser.ParseArgs(args);
@@ -116,7 +119,8 @@ int main(int argc, const char * argv[]) {
     }
 
     if(auto_play) {
-        std::cout << "Prepare for audio playback! " << args::get(output).c_str() << std::endl;
+        console->info("Prepare for audio playback: {}", args::get(output).c_str());
+    
         return playbackAudio(args::get(output).c_str());
     };
 
@@ -125,7 +129,7 @@ int main(int argc, const char * argv[]) {
 
 void Delete(const std::string &prog_name, const char *output, std::vector<std::string>::const_iterator begin_args, std::vector<std::string>::const_iterator end_args)
 {
-    std::cout << " Leave me out to rot and die..." << std::endl;
+    console->info("Leave me out to rot and die :(");
     
     args::ArgumentParser parser("");
     parser.Prog(prog_name + " delete");
@@ -148,7 +152,8 @@ void Delete(const std::string &prog_name, const char *output, std::vector<std::s
 
 void Add(const std::string &prog_name, const char *output, std::vector<std::string>::const_iterator begin_args, std::vector<std::string>::const_iterator end_args)
 {
-    std::cout << " Add me up and up and up!" << std::endl;
+    console->info("Add me up and up and up!");
+    
     args::ArgumentParser parser("");
     parser.Prog(prog_name + " add");
     args::HelpFlag help(parser, "help", "Display this help menu", {'h', "help"});

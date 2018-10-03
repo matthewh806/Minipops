@@ -11,6 +11,8 @@
 #include "helper_functions.hpp"
 
 namespace syro_operations {
+    auto console = spdlog::stdout_color_mt("syro_operations");
+    
     void freeSyroData(SyroData *syro_data, int num_of_data)
     {
         int i;
@@ -54,18 +56,18 @@ namespace syro_operations {
         
         auto count = slots.size();
         
-        std::cout << " operating on " << count << " slots" << std::endl;
+        console->info("Operating on {} slots", count);
         
         // in_files is only valid for adding not deleting
         for(int i = 0; i < count; i++) {
             switch (data_type) {
                 case DataType_Sample_Erase:
-                    std::cout << "constructing delete data for slot: " << slots[i] << std::endl;
+                    console->info("constructing delete data for slot: {}", slots[i]);
                     syro_operations::constructDeleteData(syroData, slots[i]);
-                    std::cout << "goodbye little sample :'(" << std::endl;
+                    console->info("goodbye little sample :'(");
                     break;
                 case DataType_Sample_Compress:
-                    std::cout << "constructing add data for slot: " << slots[i] << std::endl;
+                    console->info("constructing add data for slot: {}", slots[i]);
                     syro_operations::constructAddData(syroData, in_files, slots[i]);
                     break;
                 default:
@@ -75,7 +77,7 @@ namespace syro_operations {
         
         status = SyroVolcaSample_Start(&handle, syroData, numOfData, 0, &frame);
         if(status != Status_Success) {
-            printf(" Start error, %d \n", status);
+            console->error("Start error {}", status);
             syro_operations::freeSyroData(syroData, numOfData);
             
             return 1;
@@ -85,7 +87,7 @@ namespace syro_operations {
         
         buf_dest = (uint8_t*) malloc(size_dest);
         if(!buf_dest) {
-            printf(" Not enough memory for write file.\n");
+            console->error(" Not enough memory for write file");
             SyroVolcaSample_End(handle);
             syro_operations::freeSyroData(syroData, numOfData);
             
@@ -110,11 +112,18 @@ namespace syro_operations {
         syro_operations::freeSyroData(syroData, numOfData);
         
         if(volca_helper_functions::writeFile(out_filename, buf_dest, size_dest))
-            printf("Conversion complete\n");
+            console->info("Conversion complete");
         
         free(buf_dest);
         
         return 0;
+    }
+    
+    bool wavLogErrorAndFree(const char* msg, uint8_t* src)
+    {
+        console->error(msg);
+        free(src);
+        return false;
     }
     
     bool setupSampleFile(const char *filename, SyroData *syroData)
@@ -131,49 +140,25 @@ namespace syro_operations {
             return false;
         }
         
-        if(size <= sizeof(volca_constants::wav_header)) {
-            printf("wav file error, too small. \n");
-            free(src);
-            return false;
-        }
+        if(size <= sizeof(volca_constants::wav_header)) return wavLogErrorAndFree("wav file error, too small.", src);
         
         // check header, fmt
-        if(memcmp(src, volca_constants::wav_header, 4)) {
-            printf("wav file error, 'RIFF' is not found.\n");
-            free(src);
-            return false;
-        }
+        if(memcmp(src, volca_constants::wav_header, 4)) return wavLogErrorAndFree("wav file error, 'RIFF' is not found.", src);
         
-        if (memcmp((src + WAV_POS_WAVEFMT), (volca_constants::wav_header + WAV_POS_WAVEFMT), 8)) {
-            printf ("wav file error, 'WAVE' or 'fmt ' is not found.\n");
-            free(src);
-            return false;
-        }
+        if (memcmp((src + WAV_POS_WAVEFMT), (volca_constants::wav_header + WAV_POS_WAVEFMT), 8)) return wavLogErrorAndFree("wav file error, 'WAVE' or 'fmt ' is not found.", src);
         
         wav_pos = WAV_POS_WAVEFMT + 4;
         
-        if(volca_helper_functions::get16BitValue(src + wav_pos + 8 + WAVFMT_POS_ENCODE) != 1) {
-            printf("wav file error, encode must be '1'. \n");
-            free(src);
-            return false;
-        }
-        
+        if(volca_helper_functions::get16BitValue(src + wav_pos + 8 + WAVFMT_POS_ENCODE) != 1)  return wavLogErrorAndFree("wav file error, encode must be '1'.", src);
+
         num_of_ch = volca_helper_functions::get16BitValue(src + wav_pos + 8 + WAVFMT_POS_CHANNEL);
-        if((num_of_ch != 1) && (num_of_ch !=2)) {
-            printf("wav file error, channel must be 1 or 2.\n");
-            free(src);
-            return false;
-        }
+        if((num_of_ch != 1) && (num_of_ch !=2)) return wavLogErrorAndFree("wav file error, channel must be 1 or 2.", src);
         
         {
             uint16_t num_of_bit;
             
             num_of_bit = volca_helper_functions::get16BitValue(src + wav_pos + 8 + WAVFMT_POS_BIT);
-            if((num_of_bit != 16) && (num_of_bit != 24)) {
-                printf("wav file error, bit must be 16 or 24.\n");
-                free(src);
-                return false;
-            }
+            if((num_of_bit != 16) && (num_of_bit != 24)) return wavLogErrorAndFree("wav file error, bit must be 16 or 24", src);
             
             sample_byte = (num_of_bit / 8);
         }
@@ -188,27 +173,15 @@ namespace syro_operations {
             }
             
             wav_pos += chunk_size + 8;
-            if((wav_pos + 8) > size) {
-                printf("wav file error, 'data' chunk not found. \n");
-                free(src);
-                return false;
-            }
+            if((wav_pos + 8) > size) return wavLogErrorAndFree("wav file error, 'data' chunk not found.", src);
         }
         
-        if((wav_pos + chunk_size + 8) > size) {
-            printf("wav file error, illegal 'data' chunk size. \n");
-            free(src);
-            return false;
-        }
+        if((wav_pos + chunk_size + 8) > size) return wavLogErrorAndFree("wav file error, illegal 'data' chunk size.", src);
         
         num_of_frame = chunk_size / (num_of_ch * sample_byte);
         chunk_size = (num_of_frame * 2); // I think this is to convert to 16bit (2*2byte) 1 ch
         syroData->pData = (uint8_t *)malloc(chunk_size);
-        if(!syroData->pData) {
-            printf("Not enough memory to setup file. \n");
-            free(src);
-            return false;
-        }
+        if(!syroData->pData) return wavLogErrorAndFree("Not enough memory to setup file.", src);
         
         {
             uint8_t *poss;
@@ -247,16 +220,15 @@ namespace syro_operations {
         syroData->SampleEndian = LittleEndian;
         
         free(src);
-        
-        printf("Prepared sample ok!\n");
+        console->info("Prepared sample ok!");
         
         return true;
     }
     
     void constructAddData(SyroData *syro_data, const char *filename, int number)
     {
-        std::cout << "is directory: " << volca_helper_functions::isDirectory(filename) << std::endl;
-        std::cout << "is file: " << volca_helper_functions::isRegularFile(filename) << std::endl;
+        console->info("is directory: {}", volca_helper_functions::isDirectory(filename));
+        console->info("is file: {}", volca_helper_functions::isRegularFile(filename));
         
         std::vector<std::string> files; // TODO: Check for wav type...
         
@@ -270,7 +242,7 @@ namespace syro_operations {
         
         for(int i = 0; i < files.size(); i++) {
             
-            std::cout << "constructing add data for: " << files[i] << std::endl;
+            console->info("constructing add data for: {}", files[i]);
             
             syro_data->DataType = DataType_Sample_Compress;
             syro_data->Quality = 16;

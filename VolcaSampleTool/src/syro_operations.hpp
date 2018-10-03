@@ -12,6 +12,7 @@
 #include <stdio.h>
 #include <vector>
 #include "korg_syro_volcasample.h"
+#include "spdlog/sinks/stdout_color_sinks.h"
 
 namespace syro_operations {
     extern void freeSyroData(SyroData *syro_data, int num_of_data);

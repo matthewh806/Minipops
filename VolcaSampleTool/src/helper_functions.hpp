@@ -14,6 +14,7 @@
 #include <dirent.h>
 #include <sys/stat.h>
 #include <vector>
+#include "spdlog/sinks/stdout_color_sinks.h"
 
 #define WAVFMT_POS_ENCODE    0x00
 #define WAVFMT_POS_CHANNEL    0x02

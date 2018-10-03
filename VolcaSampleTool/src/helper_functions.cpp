@@ -11,6 +11,8 @@
 
 namespace volca_helper_functions {
     
+    auto console = spdlog::stdout_color_mt("helper_functions");
+    
     uint16_t get16BitValue(uint8_t *ptr)
     {
         uint16_t dat;
@@ -91,7 +93,7 @@ namespace volca_helper_functions {
         
         fp = fopen(filename, "rb");
         if(!fp) {
-            printf(" File open error, %s \n", filename);
+            console->error("File open error {}", filename);
             return NULL;
         }
         
@@ -101,13 +103,13 @@ namespace volca_helper_functions {
         
         buf = (uint8_t*)malloc(size);
         if (!buf) {
-            printf (" Not enough memory for read file.\n");
+            console->error("Not enough memory for read file", filename);
             fclose(fp);
             return NULL;
         }
         
         if (fread(buf, 1, size, fp) < size) {
-            printf (" File read error, %s \n", filename);
+            console->error("File read error {}", filename);
             fclose(fp);
             free(buf);
             return NULL;
@@ -125,12 +127,12 @@ namespace volca_helper_functions {
         
         fp = fopen(filename, "wb");
         if(!fp) {
-            printf(" File open error, %s \n", filename);
+            console->error("File open error {}", filename);
             return false;
         }
         
         if(fwrite(buf, 1, size, fp) < size) {
-            printf(" File write error, %s \n", filename);
+            console->error("File write error {}", filename);
             fclose(fp);
             return false;
         }

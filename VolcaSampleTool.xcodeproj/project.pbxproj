@@ -50,6 +50,7 @@
 		34E0B7D62162D273000378BA /* syro_operations.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = syro_operations.cpp; path = src/syro_operations.cpp; sourceTree = "<group>"; };
 		34E0B7D72162D273000378BA /* syro_operations.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = syro_operations.hpp; path = src/syro_operations.hpp; sourceTree = "<group>"; };
 		34E0B7DB2162DAEF000378BA /* helper_functions.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = helper_functions.cpp; path = src/helper_functions.cpp; sourceTree = "<group>"; };
+		34E0B7E32164FAC3000378BA /* args.hxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = args.hxx; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -86,6 +87,7 @@
 		345865A72150D77300496A95 /* VolcaSampleTool */ = {
 			isa = PBXGroup;
 			children = (
+				34E0B7E22164FAC3000378BA /* include */,
 				34365392215829D50073936C /* korg_syro_comp.c */,
 				3436538F215829D50073936C /* korg_syro_comp.h */,
 				3436538E215829D50073936C /* korg_syro_func.c */,
@@ -112,6 +114,14 @@
 				34D93B6E21564BA700EA4A06 /* CoreFoundation.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		34E0B7E22164FAC3000378BA /* include */ = {
+			isa = PBXGroup;
+			children = (
+				34E0B7E32164FAC3000378BA /* args.hxx */,
+			);
+			path = include;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -302,7 +312,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS_NOT_USED_IN_PRECOMPS = __MACOSX_CORE__;
 				HEADER_SEARCH_PATHS = (
 					/usr/local/include,
-					"$(PROJECT_DIRECTORY)/include",
+					"$(PROJECT_DIRECTORY)/VolcaSampleTool/include/**",
 				);
 				LIBRARY_SEARCH_PATHS = /usr/local/lib;
 				OTHER_LDFLAGS = "-lSDL2";
@@ -319,7 +329,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS_NOT_USED_IN_PRECOMPS = __MACOSX_CORE__;
 				HEADER_SEARCH_PATHS = (
 					/usr/local/include,
-					"$(PROJECT_DIRECTORY)/include",
+					"$(PROJECT_DIRECTORY)/VolcaSampleTool/include/**",
 				);
 				LIBRARY_SEARCH_PATHS = /usr/local/lib;
 				OTHER_LDFLAGS = "-lSDL2";
