@@ -82,6 +82,19 @@ int main(int argc, const char * argv[]) {
     
     spdlog::set_level(spdlog::level::debug);
     
+    std::cout << R"(
+    
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    __   __   __   __
+    |\/| | |\ | | |__) /  \ |__) /__`
+    |  | | | \| | |    \__/ |    .__/
+    
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    )";
+    
+    std::cout << "minipops 67 [120.2] - iiieh eeeh, loviudaineppoh, if mi" << std::endl << std::endl;
+    
     const std::vector<std::string> args(argv + 1, argv + argc);
     args::ArgumentParser parser("Hello, welcome to VoLCA TOoOOoooOL!", "Valid commands are add and delete");
     args::HelpFlag help(parser, "help", "Display this help menu", {'h', "help"});
