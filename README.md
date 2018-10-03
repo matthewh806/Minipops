@@ -5,7 +5,7 @@
                                    
 </pre>
 
-## ---------- ONLY TESTED AGAINST macOS High Sierra, 
+## ---------- ONLY TESTED AGAINST macOS High Sierra ----------
 ## ---------- USE AT YOUR OWN PERIL! ----------
 
 ## What is this
