@@ -17,7 +17,6 @@ namespace volca_helper_functions {
     {
         uint16_t dat;
         
-        // TODO: wtf is going on here
         dat = (uint16_t)ptr[1];
         dat <<= 8;
         dat |= (uint16_t)ptr[0];
@@ -43,7 +42,6 @@ namespace volca_helper_functions {
     
     void set32BitValue(uint8_t *ptr, uint32_t dat)
     {
-        // TODO: Don't you dare delete this comment until you understand this code!!
         for(int i = 0; i < 4; i++)
         {
             *ptr++ = (uint8_t)dat;
@@ -81,7 +79,6 @@ namespace volca_helper_functions {
     void readDirectory(const char *dirname, std::vector<std::string>& v, std::regex ext_pattern)
     {
         // NOTE: Includes dir in path name vector out
-        // TODO: Bug if user doesn't give trailing slash in dir name - FIX!!
         DIR* dirp = opendir(dirname);
         struct dirent *dp;
         while ((dp = readdir(dirp)) != NULL) {

@@ -75,16 +75,6 @@ void Delete(const std::string &prog_name, const char *output, std::vector<std::s
 using commandType = std::function<void(const std::string &, const char *, std::vector<std::string>::const_iterator, std::vector<std::string>::const_iterator)>;
 
 int main(int argc, const char * argv[]) {
-    
-    // TODO: Specify relative or full path at CLI
-    // TODO: Default path to save the syro stream
-    // TODO: pass audio buffer straight to device without saving it? (pointlessly saving and then loading saved file...)
-    // TODO: offset the value of the sample slots (currently only takes 0...x)
-    // TODO: animated ascii while waiting for playback (ask kendal maybe?)
-    // TODO: restore factory settings (will increase the download size massively unless dl'd from the internet)
-    // TODO: Playback sound on a different thread?
-    // TODO: lots of things!!!! ^^^^^
-    
     std::unordered_map<std::string, commandType> map {
         {"add", Add},
         {"delete", Delete}
@@ -165,12 +155,6 @@ void Add(const std::string &prog_name, const char *output, std::vector<std::stri
     args::HelpFlag help(parser, "help", "Display this help menu", {'h', "help"});
     args::Positional<std::string> samples(parser, "samples", "The sample(s) to load. Can be a file or directory (.wav format)");
     args::PositionalList<int> slots(parser, "slots", "The numbers of the sample slots to add the samples (0-based)");
-
-    // TODO: Mutually exclusive arguments: individual files, directories.
-    //
-    // Pattern?
-    // Directories should just take a start argument and end be determined by the number of files in dir
-    // Individual files should be specified as filename.wav and index if possible?
 
     try
     {

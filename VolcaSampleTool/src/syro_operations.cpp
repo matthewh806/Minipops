@@ -110,7 +110,6 @@ namespace syro_operations {
             }
         }
         
-        // TODO: fix : volcatool(99797,0x7fffad342380) malloc: *** error for object 0x7fbc97d01594: pointer being freed was not allocated when SyroVolca_Start returns an error.
         status = SyroVolcaSample_Start(&handle, syroData, numOfData, 0, &frame);
         if(status != Status_Success) {
             console->error("Start error {}", status);
