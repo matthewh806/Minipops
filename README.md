@@ -15,6 +15,8 @@ I am currently making use of two libraries:
 
 - [args](https://github.com/Taywee/args) which is a simple header-only C++ argument parser library (similar to [argparse](https://docs.python.org/3/library/argparse.html) in Python). Because this is a header only library, its included in its entirety in the Include directory.
 
+-[spdlog](https://github.com/gabime/spdlog) a simple header-only C++ logging facility. I wanted to just include this in the include dir. as with args, but Xcode seemed to be having a problem finding the header files in subdirectories, even despite me telling it to search paths `$(PROJECT_DIRECTORY)/VolcaSampleTool/include` recursively. So, unfortunately this is a dependency for building: `brew install spdlog`
+
 ### Compiling
 #### Xcode
 The provided Xcode project should work out of the box. Just open and hit run!
