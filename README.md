@@ -1,11 +1,16 @@
 # VolcaSampleTool
 
+## ---------- ONLY TESTED AGAINST macOS High Sierra, 
+## ---------- USE AT YOUR OWN PERIL! ----------
+
 ## What is this
 This is my personal tool for loading / deleting samples from my [Korg Volca Sample](https://www.korg.com/us/products/dj/volca_sample/)
 
 There is some great 3rd party software out there for achieving the same (or similar), but of the ones I've tried each is lacking in some certain regard. Since Korg open sourced the [Syro SDK](http://korginc.github.io/volcasample/) and it is based on quite an interesting method of encoding the binary data and transfer I decided to write my own tool. 
 
-Currently this is a command line app because the operations I want to perform can be easily and simply expressed with a few commands and therefore I have built a GUI.
+Currently this is a command line app because the operations I want to perform can be easily and simply expressed with a few commands and therefore I have not built a GUI.
+
+I have an active [Trello](https://trello.com/b/Xhqh0N8C/volcasampletool) board where I'm putting all my TODOs, bugs and ideas for improvements / features.
 
 ## Building
 ### Dependencies
