@@ -67,15 +67,37 @@ namespace volca_helper_functions {
         return S_ISDIR(path_stat.st_mode);
     }
     
-    
-    void readDirectory(const char *dirname, std::vector<std::string>& v)
+    std::string getFileExtension(const std::string& s)
     {
-        // NOTE: Includes dir in path name vector
+        size_t i = s.rfind('.', s.length());
+        if (i != std::string::npos) {
+            return(s.substr(i+1, s.length() - i));
+        }
         
+        return "";
+    }
+    
+    
+    void readDirectory(const char *dirname, std::vector<std::string>& v, std::regex ext_pattern)
+    {
+        // NOTE: Includes dir in path name vector out
         // TODO: Bug if user doesn't give trailing slash in dir name - FIX!!
         DIR* dirp = opendir(dirname);
         struct dirent *dp;
         while ((dp = readdir(dirp)) != NULL) {
+            // TODO: THis doesn't seem to work, but it would be nice.
+//            if(!isRegularFile(dp->d_name)) {
+//                console->debug("{} not a regular file, skipping", dp->d_name);
+//                continue;
+//            }
+//
+            const std::string extension = getFileExtension(dp->d_name);
+            if(!std::regex_match(extension, ext_pattern))
+            {
+                console->debug("{} (ext {}). Doesn't have expected extenson, skipping", dp->d_name, extension);
+                continue;
+            }
+            
             char path[100];
             
             strcpy(path, dirname);

@@ -9,8 +9,11 @@
 #include "syro_operations.hpp"
 #include <iostream>
 #include "helper_functions.hpp"
+#include <regex>
 
 namespace syro_operations {
+    const std::regex wav_files( "\\wav" ) ; // TODO: This regex is quite pointless atm...
+    
     auto console = spdlog::stdout_color_mt("syro_operations");
     
     void freeSyroData(SyroData *syro_data, int num_of_data)
@@ -38,6 +41,39 @@ namespace syro_operations {
         syro_data++;
     }
     
+    void constructAddData(SyroData *syro_data, const char *filename, int number)
+    {
+        console->info("is directory: {}", volca_helper_functions::isDirectory(filename));
+        console->info("is file: {}", volca_helper_functions::isRegularFile(filename));
+        
+        std::vector<std::string> files;
+        
+        if(volca_helper_functions::isDirectory(filename)) {
+            volca_helper_functions::readDirectory(filename, files, wav_files);
+        } else if (volca_helper_functions::isRegularFile(filename)) {
+            files.push_back(filename);
+        } else {
+            // oh dear...
+        }
+        
+        for(int i = 0; i < files.size(); i++) {
+            
+            console->info("constructing add data for: {}", files[i]);
+            
+            syro_data->DataType = DataType_Sample_Compress;
+            syro_data->Quality = 16;
+            syro_data->Number = i;
+            
+            if(!setupSampleFile(files[i].c_str(), syro_data)) {
+                console->warn("Constructing data for {} failed, skipping!", files[i]);
+                continue;
+            }
+            
+            console->info("Constructing data for {} complete", files[i]);
+            syro_data++;
+        }
+    }   
+    
     int constructSyroStream(const char *out_filename, const char *in_files, SyroDataType data_type, std::vector<int> slots)
     {
         // 1.prepare the data to be converted
@@ -55,7 +91,6 @@ namespace syro_operations {
         int16_t left, right;
         
         auto count = slots.size();
-        
         console->info("Operating on {} slots", count);
         
         // in_files is only valid for adding not deleting
@@ -75,6 +110,7 @@ namespace syro_operations {
             }
         }
         
+        // TODO: fix : volcatool(99797,0x7fffad342380) malloc: *** error for object 0x7fbc97d01594: pointer being freed was not allocated when SyroVolca_Start returns an error.
         status = SyroVolcaSample_Start(&handle, syroData, numOfData, 0, &frame);
         if(status != Status_Success) {
             console->error("Start error {}", status);
@@ -223,35 +259,5 @@ namespace syro_operations {
         console->info("Prepared sample ok!");
         
         return true;
-    }
-    
-    void constructAddData(SyroData *syro_data, const char *filename, int number)
-    {
-        console->info("is directory: {}", volca_helper_functions::isDirectory(filename));
-        console->info("is file: {}", volca_helper_functions::isRegularFile(filename));
-        
-        std::vector<std::string> files; // TODO: Check for wav type...
-        
-        if(volca_helper_functions::isDirectory(filename)) {
-            volca_helper_functions::readDirectory(filename, files);
-        } else if (volca_helper_functions::isRegularFile(filename)) {
-            files.push_back(filename);
-        } else {
-            // oh dear...
-        }
-        
-        for(int i = 0; i < files.size(); i++) {
-            
-            console->info("constructing add data for: {}", files[i]);
-            
-            syro_data->DataType = DataType_Sample_Compress;
-            syro_data->Quality = 16;
-            syro_data->Number = i;
-            
-            if(!setupSampleFile(files[i].c_str(), syro_data))
-                continue;
-            
-            syro_data++;
-        }
     }
 }

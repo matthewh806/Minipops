@@ -82,12 +82,15 @@ int main(int argc, const char * argv[]) {
     // TODO: offset the value of the sample slots (currently only takes 0...x)
     // TODO: animated ascii while waiting for playback (ask kendal maybe?)
     // TODO: restore factory settings (will increase the download size massively unless dl'd from the internet)
+    // TODO: Playback sound on a different thread?
     // TODO: lots of things!!!! ^^^^^
     
     std::unordered_map<std::string, commandType> map {
         {"add", Add},
         {"delete", Delete}
     };
+    
+    spdlog::set_level(spdlog::level::debug);
     
     const std::vector<std::string> args(argv + 1, argv + argc);
     args::ArgumentParser parser("Hello, welcome to VoLCA TOoOOoooOL!", "Valid commands are add and delete");
@@ -120,10 +123,13 @@ int main(int argc, const char * argv[]) {
 
     if(auto_play) {
         console->info("Prepare for audio playback: {}", args::get(output).c_str());
-    
-        return playbackAudio(args::get(output).c_str());
+        playbackAudio(args::get(output).c_str());
+        console->info("Audio playback complete. GOODBYE <3");
+        return 0;
     };
 
+    
+    console->info("Remember to transfer your sounds to your Volca <3");
     return 0;
 }
 

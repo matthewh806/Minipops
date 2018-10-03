@@ -14,6 +14,7 @@
 #include <dirent.h>
 #include <sys/stat.h>
 #include <vector>
+#include <regex>
 #include "spdlog/sinks/stdout_color_sinks.h"
 
 #define WAVFMT_POS_ENCODE    0x00
@@ -49,9 +50,10 @@ namespace volca_helper_functions {
     extern void set32BitValue(uint8_t *ptr, uint32_t dat);
     extern bool isRegularFile(const char *path);
     extern bool isDirectory(const char *path);
-    extern void readDirectory(const char *dirname, std::vector<std::string>& v);
+    extern void readDirectory(const char *dirname, std::vector<std::string>& v, std::regex ext_pattern);
     extern uint8_t *readFile(const char *filename, uint32_t *p_size);
     bool writeFile(const char *filename, uint8_t *buf, uint32_t size);
+    std::string getFileExtension(const std::string& s);
 }
 
 #endif /* helper_functions_hpp */
