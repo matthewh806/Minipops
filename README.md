@@ -1,4 +1,9 @@
-# VolcaSampleTool
+<pre>
+                __   __   __   __  
+ |\/| | |\ | | |__) /  \ |__) /__` 
+ |  | | | \| | |    \__/ |    .__/ 
+                                   
+</pre>
 
 ## ---------- ONLY TESTED AGAINST macOS High Sierra, 
 ## ---------- USE AT YOUR OWN PERIL! ----------
@@ -11,6 +16,9 @@ There is some great 3rd party software out there for achieving the same (or simi
 Currently this is a command line app because the operations I want to perform can be easily and simply expressed with a few commands and therefore I have not built a GUI.
 
 I have an active [Trello](https://trello.com/b/Xhqh0N8C/volcasampletool) board where I'm putting all my TODOs, bugs and ideas for improvements / features.
+
+### Name
+What is does the name Minipop mean or have to do with anything? Well, Korg's SDK is called Syro, which I think must be a reference to the aphex twin [album](https://en.wikipedia.org/wiki/Syro) of the same name. I love the track [minipops 67 [120.2]](https://open.spotify.com/track/6kzLbNxsJidjc80Nw3uZVg?si=kxSMP1xjToWOup7uhWUVqQ) and so I decided to steal the name :)
 
 ## Building
 ### Dependencies
